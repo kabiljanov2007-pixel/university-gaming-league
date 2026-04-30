@@ -673,7 +673,7 @@ function DisciplinesSection() {
 function TimelineSection() {
   const events = [
     { date: '1–12 МАЯ', title: 'Регистрация команд', desc: 'Подай заявку с командой из 4 игроков', icon: <Users size={20} />, color: 'cyan' },
-    { date: '14 МАЯ', title: 'Жеребьёвка', desc: 'Формирование турнирной сетки', icon: <Target size={20} />, color: 'purple' },
+    { date: 'СКОРО', title: 'Подготовка', desc: 'Дата и детали уточняются', icon: <Target size={20} />, color: 'purple' },
     { date: '15 МАЯ', title: 'День турнира', desc: 'Групповой этап, плей-офф и финал', icon: <Trophy size={20} />, color: 'gold' },
     { date: '15 МАЯ', title: 'Церемония награждения', desc: 'Вручение медалей и кубков победителям', icon: <Star size={20} />, color: 'gold' },
   ]

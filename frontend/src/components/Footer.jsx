@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Gamepad2, MapPin, Mail, Phone } from 'lucide-react'
+import { Gamepad2, MapPin, Mail, Phone, MessageCircle } from 'lucide-react'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -74,7 +74,11 @@ export default function Footer() {
               </li>
               <li>
                 <Phone size={16} className="contact-icon" />
-                <a href="tel:+996755041207">+996 755 041 207</a>
+                <a href="https://wa.me/996755041207" target="_blank" rel="noopener noreferrer">WhatsApp: +996 755 041 207</a>
+              </li>
+              <li>
+                <MessageCircle size={16} className="contact-icon" />
+                <a href="https://t.me/kabilzhanovv" target="_blank" rel="noopener noreferrer">Telegram: @kabilzhanovv</a>
               </li>
             </ul>
           </div>

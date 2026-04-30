@@ -17,7 +17,7 @@ const faqs = [
       },
       {
         q: 'Сколько человек в команде?',
-        a: 'Основной состав — 4 игрока. Можно зарегистрировать 1 запасного (5-й игрок). Каждый игрок должен играть только за одну команду в одной дисциплине.',
+        a: 'Основной состав — 4 игрока. Каждый игрок должен играть только за одну команду в одной дисциплине.',
       },
       {
         q: 'Можно ли участвовать в обеих дисциплинах?',
@@ -38,15 +38,11 @@ const faqs = [
       },
       {
         q: 'Какой формат турнира?',
-        a: 'Групповой этап (3 матча) → Полуфинал → Финал. Команды из топ-2 каждой группы выходят в плей-офф. Результат определяется по системе очков: очки за место + очки за фраги.',
+        a: 'Групповой этап → Полуфинал → Финал. Точный формат определения победителей пока уточняется.',
       },
       {
         q: 'Нужно ли приносить собственное устройство?',
         a: 'Да, каждый участник должен иметь собственный смартфон или планшет с установленной игрой. Организаторы предоставят Wi-Fi. Использование стороннего интернета на матчах запрещено.',
-      },
-      {
-        q: 'Как начисляются очки в PUBG Mobile?',
-        a: 'Очки за место: 1-е — 10 очков, 2-е — 6 очков, 3-е — 5 очков, 4-е — 4 очка, и так далее. Плюс 1 очко за каждый фраг (убийство). Финальный результат — сумма за 3 матча.',
       },
       {
         q: 'Что будет в случае технических проблем во время матча?',
@@ -54,7 +50,7 @@ const faqs = [
       },
       {
         q: 'Когда проводится турнир?',
-        a: 'Турнир состоится 15 мая 2026 года. Жеребьёвка — 14 мая. Регистрация команд открыта с 1 по 12 мая 2026.',
+        a: 'Турнир состоится 15 мая 2026 года. Подготовка — дата уточняется. Регистрация команд открыта с 1 по 12 мая 2026.',
       },
     ],
   },
@@ -155,11 +151,14 @@ export default function FAQ() {
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 20, lineHeight: 1.6 }}>
                   Если у тебя остались вопросы — свяжись с нами!
                 </p>
-                <a href="https://t.me/" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginBottom: 12 }}>
-                  Telegram
+                <a href="https://t.me/kabilzhanovv" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginBottom: 10 }}>
+                  Telegram @kabilzhanovv
                 </a>
-                <a href="mailto:kabiljanov2007@gmail.com" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center' }}>
-                  kabiljanov2007@gmail.com
+                <a href="https://wa.me/996755041207" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', marginBottom: 10 }}>
+                  WhatsApp +996 755 041 207
+                </a>
+                <a href="mailto:universitygamingleaguemnu@gmail.com" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', fontSize: '0.78rem' }}>
+                  universitygamingleaguemnu@gmail.com
                 </a>
               </div>
 
