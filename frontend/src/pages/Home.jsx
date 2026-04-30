@@ -734,7 +734,7 @@ function TimelineSection() {
 function AboutSection() {
   const features = [
     { icon: <MapPin size={24} />, title: 'Локация', desc: 'ул. Тарсус, 1а, Манас. Кампус университета им. К.Ш. Токтоматова' },
-    { icon: <Clock size={24} />, title: 'Формат', desc: 'Офлайн турнир. Групповой этап + Плей-офф + Гранд финал' },
+    { icon: <Clock size={24} />, title: 'Формат', desc: 'Пока неизвестно' },
     { icon: <Users size={24} />, title: 'Участники', desc: 'Студенты университетов Кыргызстана. Команды по 4 человека' },
     { icon: <Trophy size={24} />, title: 'Призы', desc: 'Дипломы, медали, кубки и специальные награды от партнёров турнира' },
   ]
