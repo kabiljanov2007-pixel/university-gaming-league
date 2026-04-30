@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS admins (
 -- News
 CREATE TABLE IF NOT EXISTS news (
   id SERIAL PRIMARY KEY,
-  title VARCHAR(300) NOT NULL,
+  title VARCHAR(300) UNIQUE NOT NULL,
   excerpt TEXT,
   content TEXT,
   tag VARCHAR(50) DEFAULT 'Новости',

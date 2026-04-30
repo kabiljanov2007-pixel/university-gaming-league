@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Gamepad2, MapPin, Mail, Phone, Instagram, Youtube, Send } from 'lucide-react'
+import { Gamepad2, MapPin, Mail, Phone } from 'lucide-react'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -26,17 +26,6 @@ export default function Footer() {
             <p className="footer-desc">
               Первый университетский турнир по мобильному киберспорту в Кыргызстане. Покажи на что ты способен!
             </p>
-            <div className="social-links">
-              <a href="#" className="social-btn" aria-label="Instagram">
-                <Instagram size={18} />
-              </a>
-              <a href="#" className="social-btn" aria-label="YouTube">
-                <Youtube size={18} />
-              </a>
-              <a href="#" className="social-btn" aria-label="Telegram">
-                <Send size={18} />
-              </a>
-            </div>
           </div>
 
           <div className="footer-col">
@@ -77,11 +66,11 @@ export default function Footer() {
             <ul className="footer-contacts">
               <li>
                 <MapPin size={16} className="contact-icon" />
-                <span>ул. Тарсус, 1а, Манас, Кыргызстан</span>
+                <span>мкр. Спутник, ул. Тарсус, 1а, Манас, Кыргызстан</span>
               </li>
               <li>
                 <Mail size={16} className="contact-icon" />
-                <a href="mailto:kabiljanov2007@gmail.com">kabiljanov2007@gmail.com</a>
+                <a href="mailto:universitygamingleaguemnu@gmail.com">universitygamingleaguemnu@gmail.com</a>
               </li>
               <li>
                 <Phone size={16} className="contact-icon" />

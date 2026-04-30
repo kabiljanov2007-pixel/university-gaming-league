@@ -25,7 +25,7 @@ export default function Register() {
       university: '',
       contactName: '',
       contactPhone: '',
-      contactTelegram: '',
+      contactEmail: '',
       members: [
         { name: '', gameNickname: '', studentId: '' },
         { name: '', gameNickname: '', studentId: '' },
@@ -378,6 +378,37 @@ export default function Register() {
           border-radius: var(--radius-sm);
         }
 
+        .member-row-full {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-sm);
+          padding: 12px 14px;
+          margin-bottom: 8px;
+        }
+        .member-row-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 6px;
+        }
+        .member-row-num {
+          font-family: var(--font-game);
+          font-size: 0.7rem;
+          font-weight: 700;
+          color: var(--cyan);
+          letter-spacing: 0.08em;
+        }
+        .member-row-nick {
+          font-family: var(--font-game);
+          font-size: 0.8rem;
+          color: var(--purple);
+        }
+        .member-row-details {
+          display: flex;
+          gap: 20px;
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+        }
         .agree-text {
           font-size: 0.82rem;
           color: var(--text-secondary);
@@ -424,8 +455,8 @@ function Step0({ register, errors, watch }) {
       <p className="step-title">Выбери дисциплину</p>
       <div className="discipline-select-grid">
         {[
-          { value: 'pubg', emoji: '🎯', name: 'PUBG Mobile', desc: 'Squads · 4 игрока', colorClass: 'cyan' },
-          { value: 'freefire', emoji: '🔥', name: 'Free Fire', desc: 'Squads · 4 игрока', colorClass: 'purple' },
+          { value: 'pubg', emoji: '🎯', name: 'PUBG Mobile', desc: 'Офлайн · Battle Royale · Карта: Эрангель', colorClass: 'cyan' },
+          { value: 'freefire', emoji: '🔥', name: 'Free Fire', desc: 'Офлайн · Battle Royale · Карта: Бермуды', colorClass: 'purple' },
         ].map(d => (
           <label
             key={d.value}
@@ -460,16 +491,11 @@ function Step1({ register, errors }) {
 
         <div className="form-group full-width">
           <label className="form-label">Университет *</label>
-          <select className={`form-select ${errors.university ? 'error' : ''}`} {...register('university', { required: 'Выберите университет' })}>
-            <option value="">— Выберите университет —</option>
-            <option>Университет им. К.Ш. Токтоматова</option>
-            <option>КГТУ им. И. Раззакова</option>
-            <option>КНУ им. Ж. Баласагына</option>
-            <option>КГМУ им. И.К. Ахунбаева</option>
-            <option>Международный университет Кыргызстана</option>
-            <option>АУЦА</option>
-            <option>Другой университет</option>
-          </select>
+          <input
+            className={`form-input ${errors.university ? 'error' : ''}`}
+            placeholder="Название университета"
+            {...register('university', { required: 'Введите название университета', minLength: { value: 3, message: 'Минимум 3 символа' } })}
+          />
           {errors.university && <p className="form-error">{errors.university.message}</p>}
         </div>
 
@@ -497,11 +523,12 @@ function Step1({ register, errors }) {
         </div>
 
         <div className="form-group full-width">
-          <label className="form-label">Telegram (необязательно)</label>
+          <label className="form-label">Email (необязательно)</label>
           <input
             className="form-input"
-            placeholder="@username"
-            {...register('contactTelegram')}
+            placeholder="example@gmail.com"
+            type="email"
+            {...register('contactEmail')}
           />
         </div>
       </div>
@@ -592,19 +619,25 @@ function Step3({ data }) {
       </div>
 
       <div className="confirm-section">
-        <p className="confirm-label">Игроки ({data.members?.length})</p>
+        <p className="confirm-label">Состав команды — {data.members?.length} игрока</p>
         <div className="members-list">
           {data.members?.map((m, i) => (
-            <div key={i} className="member-row">
-              <span style={{ color: 'var(--text-muted)' }}>#{i + 1} {m.name}</span>
-              <span style={{ color: 'var(--cyan)', fontFamily: 'var(--font-game)', fontSize: '0.8rem' }}>{m.gameNickname}</span>
+            <div key={i} className="member-row-full">
+              <div className="member-row-header">
+                <span className="member-row-num">{i === 0 ? '👑 КАПИТАН' : `ИГРОК ${i + 1}`}</span>
+                <span className="member-row-nick">{m.gameNickname}</span>
+              </div>
+              <div className="member-row-details">
+                <span>👤 {m.name}</span>
+                <span>🎓 {m.studentId}</span>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
       <p className="agree-text">
-        Нажимая «Отправить заявку», вы подтверждаете, что все данные верны, все участники являются студентами и согласны с правилами турнира Cyber Cup 2026.
+        Нажимая «Отправить заявку», вы подтверждаете, что все данные верны, все участники являются студентами и согласны с правилами турнира University Gaming League 2026.
       </p>
     </div>
   )
