@@ -409,6 +409,64 @@ export default function Register() {
           font-size: 0.85rem;
           color: var(--text-secondary);
         }
+        .player-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 16px 20px;
+          margin-bottom: 10px;
+          transition: border-color 0.2s;
+        }
+        .player-card-captain {
+          border-color: var(--cyan);
+          background: var(--cyan-dim);
+        }
+        .player-card-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+        }
+        .player-card-role {
+          font-family: var(--font-game);
+          font-size: 0.68rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          color: var(--cyan);
+        }
+        .player-card-captain .player-card-role {
+          color: #ffd700;
+        }
+        .player-card-index {
+          font-family: var(--font-game);
+          font-size: 0.65rem;
+          color: var(--text-muted);
+        }
+        .player-card-nick {
+          font-family: var(--font-game);
+          font-size: 1.05rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          color: var(--text-primary);
+          margin-bottom: 10px;
+          word-break: break-all;
+        }
+        .player-card-info {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .player-info-row {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.85rem;
+          padding: 4px 0;
+          border-bottom: 1px solid var(--border);
+        }
+        .player-info-row:last-child { border-bottom: none; }
+        .player-info-label { color: var(--text-muted); }
+        .player-info-val { color: var(--text-primary); font-weight: 500; word-break: break-all; text-align: right; }
+
         .agree-text {
           font-size: 0.82rem;
           color: var(--text-secondary);
@@ -622,14 +680,21 @@ function Step3({ data }) {
         <p className="confirm-label">Состав команды — {data.members?.length} игрока</p>
         <div className="members-list">
           {data.members?.map((m, i) => (
-            <div key={i} className="member-row-full">
-              <div className="member-row-header">
-                <span className="member-row-num">{i === 0 ? '👑 КАПИТАН' : `ИГРОК ${i + 1}`}</span>
-                <span className="member-row-nick">{m.gameNickname}</span>
+            <div key={i} className={`player-card ${i === 0 ? 'player-card-captain' : ''}`}>
+              <div className="player-card-top">
+                <span className="player-card-role">{i === 0 ? '👑 КАПИТАН' : `ИГРОК ${i + 1}`}</span>
+                <span className="player-card-index">#{i + 1}</span>
               </div>
-              <div className="member-row-details">
-                <span>👤 {m.name}</span>
-                <span>🎓 {m.studentId}</span>
+              <div className="player-card-nick">{m.gameNickname || '—'}</div>
+              <div className="player-card-info">
+                <div className="player-info-row">
+                  <span className="player-info-label">Имя</span>
+                  <span className="player-info-val">{m.name || '—'}</span>
+                </div>
+                <div className="player-info-row">
+                  <span className="player-info-label">Студ. билет</span>
+                  <span className="player-info-val">{m.studentId || '—'}</span>
+                </div>
               </div>
             </div>
           ))}
