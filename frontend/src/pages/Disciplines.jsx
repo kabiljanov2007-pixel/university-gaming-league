@@ -204,7 +204,7 @@ export default function Disciplines() {
         .discipline-mt { margin-top: 80px; }
 
         .discipline-hero-card {
-          border-radius: var(--radius-lg);
+          border-radius: 0;
           border: 1px solid var(--border);
           padding: 32px;
           display: grid;
@@ -213,15 +213,18 @@ export default function Disciplines() {
           align-items: stretch;
           margin-bottom: 24px;
           transition: all var(--transition);
+          clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+          backdrop-filter: blur(16px);
+          box-shadow: 0 0 24px rgba(0,0,0,0.22);
         }
 
         .disc-cyan {
-          background: linear-gradient(135deg, rgba(0, 212, 255, 0.04) 0%, var(--bg-card) 100%);
+          background: linear-gradient(135deg, rgba(0, 255, 255, 0.05) 0%, rgba(8, 14, 28, 0.86) 100%);
           border-color: var(--border-cyan);
         }
 
         .disc-purple {
-          background: linear-gradient(135deg, rgba(124, 58, 237, 0.04) 0%, var(--bg-card) 100%);
+          background: linear-gradient(135deg, rgba(255, 0, 255, 0.05) 0%, rgba(8, 14, 28, 0.86) 100%);
           border-color: var(--border-purple);
         }
 
@@ -239,12 +242,13 @@ export default function Disciplines() {
         .disc-hero-media {
           position: relative;
           min-height: 320px;
-          border-radius: 24px;
+          border-radius: 0;
           overflow: hidden;
           border: 1px solid rgba(255,255,255,0.09);
           box-shadow: 0 20px 50px rgba(0,0,0,0.35);
           background-size: cover;
           background-repeat: no-repeat;
+          clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
         }
 
         .disc-hero-media::before {
@@ -260,7 +264,7 @@ export default function Disciplines() {
           content: '';
           position: absolute;
           inset: 12px;
-          border-radius: 18px;
+          clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
           border: 1px solid rgba(255,255,255,0.08);
           pointer-events: none;
         }
@@ -285,7 +289,6 @@ export default function Disciplines() {
           bottom: 18px;
           z-index: 1;
           padding: 10px 14px;
-          border-radius: 999px;
           border: 1px solid rgba(255,255,255,0.12);
           background: rgba(6, 10, 18, 0.72);
           backdrop-filter: blur(10px);
@@ -294,6 +297,7 @@ export default function Disciplines() {
           letter-spacing: 0.12em;
           text-transform: uppercase;
           color: var(--text-primary);
+          clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
         }
 
         .disc-emoji {
@@ -330,7 +334,7 @@ export default function Disciplines() {
         }
 
         .prize-box {
-          border-radius: var(--radius);
+          border-radius: 0;
           padding: 28px;
           text-align: center;
           width: 220px;
@@ -338,15 +342,17 @@ export default function Disciplines() {
           flex-direction: column;
           align-items: center;
           gap: 12px;
+          clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+          backdrop-filter: blur(14px);
         }
 
         .prize-cyan {
-          background: var(--cyan-dim);
+          background: rgba(0, 255, 255, 0.08);
           border: 1px solid var(--border-cyan);
         }
 
         .prize-purple {
-          background: var(--purple-dim);
+          background: rgba(255, 0, 255, 0.08);
           border: 1px solid var(--border-purple);
         }
 
@@ -383,8 +389,9 @@ export default function Disciplines() {
           justify-content: space-between;
           font-size: 0.82rem;
           padding: 6px 10px;
-          border-radius: 6px;
+          border-radius: 0;
           font-weight: 600;
+          clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
         }
 
         .prize-row-gold { background: rgba(255, 215, 0, 0.1); color: var(--gold); }
@@ -398,10 +405,12 @@ export default function Disciplines() {
         }
 
         .disc-info-card {
-          background: var(--bg-card);
+          background: rgba(8, 14, 28, 0.52);
           border: 1px solid var(--border);
-          border-radius: var(--radius);
+          border-radius: 0;
           padding: 28px;
+          clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+          backdrop-filter: blur(14px);
         }
 
         .disc-card-title {
