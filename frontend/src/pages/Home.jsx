@@ -34,6 +34,36 @@ export default function Home() {
   )
 }
 
+function GradientTrophy({ size = 52, className = '' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="ugl-trophy-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00ffff" />
+          <stop offset="45%" stopColor="#63cbff" />
+          <stop offset="75%" stopColor="#a955ff" />
+          <stop offset="100%" stopColor="#ff00ff" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M8 21h8M12 17v4M7 4h10v3a5 5 0 0 1-10 0V4Zm10 1h2a2 2 0 0 1 0 4h-2M7 5H5a2 2 0 0 0 0 4h2"
+        stroke="url(#ugl-trophy-gradient)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 function HeroSection() {
   return (
     <section className="hero-v2">
@@ -119,7 +149,7 @@ function HeroSection() {
                 <span className="title-year">2026</span>
               </h1>
               <div className="hero-trophy-row">
-                <Trophy size={52} className="hero-trophy-ico" />
+                <GradientTrophy size={52} className="hero-trophy-ico" />
               </div>
             </div>
           </motion.div>
@@ -552,19 +582,23 @@ function HeroSection() {
         }
         .title-year {
           background: linear-gradient(135deg, var(--cyan) 0%, #63cbff 30%, #a955ff 65%, var(--purple) 100%);
+          display: inline-block;
           font-size: 58%;
           letter-spacing: 0.3em;
-          text-shadow: 0 0 18px rgba(0,255,255,0.35), 0 0 32px rgba(255,0,255,0.2);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+          filter: drop-shadow(0 0 14px rgba(0,255,255,0.52)) drop-shadow(0 0 26px rgba(255,0,255,0.34));
         }
 
-        .hero-trophy-row { display: flex; justify-content: center; }
+        .hero-trophy-row {
+          display: flex;
+          justify-content: center;
+          margin-top: 6px;
+        }
         .hero-trophy-ico {
-          color: transparent;
-          background: linear-gradient(135deg, var(--cyan) 0%, #63cbff 30%, #a955ff 65%, var(--purple) 100%);
-          filter: drop-shadow(0 0 18px rgba(0,255,255,0.35)) drop-shadow(0 0 30px rgba(255,0,255,0.18));
+          display: block;
+          filter: drop-shadow(0 0 18px rgba(0,255,255,0.52)) drop-shadow(0 0 30px rgba(255,0,255,0.28));
           animation: float 3s ease-in-out infinite;
         }
 

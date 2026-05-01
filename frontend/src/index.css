@@ -301,9 +301,9 @@ input, select, textarea {
 .page-hero {
   padding: 120px 0 60px;
   background:
-    radial-gradient(circle at top, rgba(0, 255, 255, 0.06), transparent 26%),
-    radial-gradient(circle at 80% 0%, rgba(255, 0, 255, 0.08), transparent 24%),
-    linear-gradient(180deg, rgba(7, 14, 30, 0.96) 0%, rgba(5, 5, 8, 1) 100%);
+    radial-gradient(circle at 50% 12%, rgba(0, 255, 255, 0.14), transparent 28%),
+    radial-gradient(circle at 78% 10%, rgba(255, 0, 255, 0.12), transparent 24%),
+    linear-gradient(180deg, rgba(4, 10, 24, 0.72) 0%, rgba(3, 5, 12, 0.34) 100%);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -317,14 +317,14 @@ input, select, textarea {
   left: 0;
   width: min(30vw, 360px);
   background:
-    linear-gradient(90deg, rgba(5, 5, 8, 0.08), rgba(5, 5, 8, 0.74)),
-    linear-gradient(180deg, rgba(5, 5, 8, 0.08), rgba(5, 5, 8, 0.78)),
+    linear-gradient(90deg, rgba(4, 10, 24, 0.02), rgba(4, 10, 24, 0.12)),
+    linear-gradient(180deg, rgba(4, 10, 24, 0.02), rgba(4, 10, 24, 0.18)),
     url('/images/pubg-poster.jpg');
   background-size: cover;
   background-position: left center;
   background-repeat: no-repeat;
-  opacity: 0.34;
-  filter: saturate(1.22) contrast(1.14) brightness(1.02);
+  opacity: 0.6;
+  filter: saturate(1.28) contrast(1.18) brightness(1.05);
   pointer-events: none;
   animation: hero-side-float-left 14s ease-in-out infinite;
   z-index: 0;
@@ -338,14 +338,14 @@ input, select, textarea {
   right: 0;
   width: min(30vw, 360px);
   background:
-    linear-gradient(270deg, rgba(5, 5, 8, 0.08), rgba(5, 5, 8, 0.74)),
-    linear-gradient(180deg, rgba(5, 5, 8, 0.08), rgba(5, 5, 8, 0.78)),
+    linear-gradient(270deg, rgba(8, 8, 26, 0.02), rgba(8, 8, 26, 0.12)),
+    linear-gradient(180deg, rgba(8, 8, 26, 0.02), rgba(8, 8, 26, 0.18)),
     url('/images/ff-poster.jpg');
   background-size: cover;
   background-position: right center;
   background-repeat: no-repeat;
-  opacity: 0.34;
-  filter: saturate(1.18) contrast(1.12) brightness(1.02);
+  opacity: 0.62;
+  filter: saturate(1.24) contrast(1.16) brightness(1.05);
   pointer-events: none;
   animation: hero-side-float-right 14s ease-in-out infinite;
   z-index: 0;
@@ -374,8 +374,8 @@ input, select, textarea {
   position: absolute;
   inset: -12px -24px;
   background:
-    linear-gradient(90deg, rgba(5,5,8,0.22) 0%, rgba(5,5,8,0.05) 22%, rgba(5,5,8,0.05) 78%, rgba(5,5,8,0.22) 100%),
-    radial-gradient(circle at center, transparent 0%, rgba(5,5,8,0.08) 58%, rgba(5,5,8,0.22) 100%);
+    radial-gradient(circle at 50% 26%, rgba(0, 255, 255, 0.045), transparent 34%),
+    radial-gradient(circle at 60% 18%, rgba(255, 0, 255, 0.045), transparent 28%);
   pointer-events: none;
   z-index: -1;
 }
