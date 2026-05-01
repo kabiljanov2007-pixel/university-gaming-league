@@ -301,13 +301,7 @@ function HeroSection() {
           z-index: 0;
         }
 
-        .circuit-grid {
-          position: absolute; inset: 0;
-          background-image:
-            linear-gradient(rgba(0, 212, 255, 0.035) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 212, 255, 0.035) 1px, transparent 1px);
-          background-size: 40px 40px;
-        }
+        .circuit-grid { display: none; }
 
         .circuit-trace-h, .circuit-trace-v {
           position: absolute;

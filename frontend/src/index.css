@@ -315,16 +315,16 @@ input, select, textarea {
   top: 0;
   bottom: 0;
   left: 0;
-  width: min(30vw, 360px);
+  width: min(28vw, 340px);
   background:
-    linear-gradient(90deg, rgba(4, 10, 24, 0.02), rgba(4, 10, 24, 0.12)),
-    linear-gradient(180deg, rgba(4, 10, 24, 0.02), rgba(4, 10, 24, 0.18)),
+    linear-gradient(90deg, rgba(4, 10, 24, 0.08), rgba(4, 10, 24, 0.3)),
+    linear-gradient(180deg, rgba(4, 10, 24, 0.08), rgba(4, 10, 24, 0.38)),
     url('/images/pubg-poster.jpg');
-  background-size: cover;
-  background-position: left center;
+  background-size: 190% auto;
+  background-position: 76% center;
   background-repeat: no-repeat;
-  opacity: 0.6;
-  filter: saturate(1.28) contrast(1.18) brightness(1.05);
+  opacity: 0.46;
+  filter: saturate(1.15) contrast(1.08) brightness(0.82) blur(0.4px);
   pointer-events: none;
   animation: hero-side-float-left 14s ease-in-out infinite;
   z-index: 0;
@@ -336,16 +336,16 @@ input, select, textarea {
   top: 0;
   bottom: 0;
   right: 0;
-  width: min(30vw, 360px);
+  width: min(28vw, 340px);
   background:
-    linear-gradient(270deg, rgba(8, 8, 26, 0.02), rgba(8, 8, 26, 0.12)),
-    linear-gradient(180deg, rgba(8, 8, 26, 0.02), rgba(8, 8, 26, 0.18)),
+    linear-gradient(270deg, rgba(8, 8, 26, 0.08), rgba(8, 8, 26, 0.3)),
+    linear-gradient(180deg, rgba(8, 8, 26, 0.08), rgba(8, 8, 26, 0.38)),
     url('/images/ff-poster.jpg');
-  background-size: cover;
-  background-position: right center;
+  background-size: 190% auto;
+  background-position: 24% center;
   background-repeat: no-repeat;
-  opacity: 0.62;
-  filter: saturate(1.24) contrast(1.16) brightness(1.05);
+  opacity: 0.48;
+  filter: saturate(1.12) contrast(1.08) brightness(0.82) blur(0.4px);
   pointer-events: none;
   animation: hero-side-float-right 14s ease-in-out infinite;
   z-index: 0;
@@ -357,16 +357,7 @@ input, select, textarea {
 }
 
 .page-hero > .container::before {
-  content: '';
-  position: absolute;
-  inset: -24px 0;
-  background-image:
-    linear-gradient(rgba(0, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 44px 44px;
-  pointer-events: none;
-  z-index: -1;
-  mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.92) 20%, rgba(0,0,0,0.92) 80%, transparent 100%);
+  content: none;
 }
 
 .page-hero > .container::after {
