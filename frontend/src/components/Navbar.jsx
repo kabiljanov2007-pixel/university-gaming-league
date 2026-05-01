@@ -44,6 +44,11 @@ export default function Navbar() {
             </div>
           </Link>
 
+          <div className="navbar-logos desktop-only">
+            <img src="/images/logo-mnu.png" alt="МНУ" className="navbar-uni-logo" />
+            <img src="/images/logo-itu.png" alt="ИТУ" className="navbar-uni-logo" />
+          </div>
+
           <nav className="navbar-links desktop-only">
             {navLinks.map(link => (
               <NavLink
@@ -212,6 +217,26 @@ export default function Navbar() {
         .btn-sm {
           padding: 9px 20px;
           font-size: 0.75rem;
+        }
+
+        .navbar-logos {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .navbar-uni-logo {
+          height: 36px;
+          width: auto;
+          object-fit: contain;
+          opacity: 0.85;
+          filter: drop-shadow(0 0 6px rgba(0,212,255,0.4));
+          transition: opacity 0.2s, filter 0.2s;
+        }
+
+        .navbar-uni-logo:hover {
+          opacity: 1;
+          filter: drop-shadow(0 0 10px rgba(0,212,255,0.7));
         }
 
         .desktop-only { display: flex; }

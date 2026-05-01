@@ -19,10 +19,12 @@
   --text-secondary: #94a3b8;
   --text-muted: #475569;
   --border: rgba(255, 255, 255, 0.08);
-  --border-cyan: rgba(0, 212, 255, 0.3);
-  --border-purple: rgba(124, 58, 237, 0.3);
+  --border-cyan: rgba(0, 212, 255, 0.4);
+  --border-purple: rgba(160, 80, 255, 0.4);
   --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.4);
   --glow-purple: 0 0 20px rgba(124, 58, 237, 0.4);
+  --magenta: #d600ff;
+  --glow-strong: 0 0 40px rgba(0, 212, 255, 0.6), 0 0 80px rgba(0, 212, 255, 0.2);
   --font-game: 'Orbitron', monospace;
   --font-body: 'Inter', sans-serif;
   --radius: 12px;
@@ -279,10 +281,22 @@ input, select, textarea {
   top: -200px;
   left: 50%;
   transform: translateX(-50%);
-  width: 800px;
-  height: 400px;
-  background: radial-gradient(ellipse, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(124, 58, 237, 0.2) 0%, rgba(0, 212, 255, 0.05) 50%, transparent 70%);
   pointer-events: none;
+}
+
+.page-hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.4), transparent);
+  animation: scan-pass 6s linear infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Form styles */
@@ -383,4 +397,55 @@ input, select, textarea {
 @keyframes flicker {
   0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 1; }
   20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.5; }
+}
+
+/* Cyberpunk enhancements */
+@keyframes pulse-glow-btn {
+  0%, 100% { box-shadow: 0 0 20px rgba(0,212,255,0.5), 0 0 40px rgba(0,212,255,0.2); }
+  50% { box-shadow: 0 0 40px rgba(0,212,255,0.9), 0 0 80px rgba(0,212,255,0.5); }
+}
+
+@keyframes border-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes glow-text {
+  0%, 100% { text-shadow: 0 0 10px rgba(0,212,255,0.6), 0 0 30px rgba(0,212,255,0.3); }
+  50% { text-shadow: 0 0 20px rgba(0,212,255,1), 0 0 50px rgba(0,212,255,0.6); }
+}
+
+@keyframes scan-pass {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
+
+.btn-pulse {
+  animation: pulse-glow-btn 2.5s ease-in-out infinite;
+}
+
+/* Clipped card corners - cyberpunk style */
+.clip-card {
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+/* Animated gradient border */
+.grad-border {
+  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.grad-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(0,212,255,0.6), rgba(160,80,255,0.6), rgba(0,212,255,0.6));
+  z-index: -1;
+}
+
+/* Tech text glow */
+.text-glow-cyan {
+  animation: glow-text 3s ease-in-out infinite;
 }

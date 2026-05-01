@@ -56,11 +56,12 @@ function HeroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <span className="uni-icon">🏛</span>
+        <img src="/images/logo-mnu.png" alt="МНУ" className="uni-logo-img" />
         <div className="uni-text">
           <strong>УНИВЕРСИТЕТ ИМЕНИ К.Ш. ТОКТОМАТОВА</strong>
           <span>приглашает принять участие в студенческом киберспортивном турнире</span>
         </div>
+        <img src="/images/logo-itu.png" alt="ИТУ" className="uni-logo-img" />
       </motion.div>
 
       {/* 3-column hero */}
@@ -118,7 +119,7 @@ function HeroSection() {
           </motion.div>
 
           <motion.div variants={fadeUp} className="hero-cta-row">
-            <Link to="/register" className="btn btn-primary hero-btn-lg">
+            <Link to="/register" className="btn btn-primary hero-btn-lg btn-pulse">
               <Zap size={16} /> Регистрация
             </Link>
             <Link to="/disciplines" className="btn btn-secondary">
@@ -255,10 +256,16 @@ function HeroSection() {
           max-width: 760px;
           width: 90%;
         }
-        .uni-icon { font-size: 1.6rem; flex-shrink: 0; }
         .uni-text { display: flex; flex-direction: column; gap: 2px; }
         .uni-text strong { font-family: var(--font-game); font-size: 0.68rem; letter-spacing: 0.07em; color: var(--text-primary); }
         .uni-text span { font-size: 0.73rem; color: var(--text-muted); }
+        .uni-logo-img {
+          height: 52px;
+          width: auto;
+          object-fit: contain;
+          flex-shrink: 0;
+          filter: drop-shadow(0 0 8px rgba(0,212,255,0.5));
+        }
 
         /* 3-column layout */
         .hero-three-col {
