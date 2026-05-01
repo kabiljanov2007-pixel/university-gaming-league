@@ -551,17 +551,20 @@ function HeroSection() {
           filter: drop-shadow(0 0 18px rgba(0,255,255,0.72));
         }
         .title-year {
-          color: var(--gold);
+          background: linear-gradient(135deg, var(--cyan) 0%, #63cbff 30%, #a955ff 65%, var(--purple) 100%);
           font-size: 58%;
           letter-spacing: 0.3em;
-          text-shadow: 0 0 18px rgba(255,215,0,0.6);
-          -webkit-text-fill-color: var(--gold);
+          text-shadow: 0 0 18px rgba(0,255,255,0.35), 0 0 32px rgba(255,0,255,0.2);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
 
         .hero-trophy-row { display: flex; justify-content: center; }
         .hero-trophy-ico {
-          color: var(--gold);
-          filter: drop-shadow(0 0 24px rgba(255,215,0,0.75));
+          color: transparent;
+          background: linear-gradient(135deg, var(--cyan) 0%, #63cbff 30%, #a955ff 65%, var(--purple) 100%);
+          filter: drop-shadow(0 0 18px rgba(0,255,255,0.35)) drop-shadow(0 0 30px rgba(255,0,255,0.18));
           animation: float 3s ease-in-out infinite;
         }
 

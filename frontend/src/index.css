@@ -374,8 +374,8 @@ input, select, textarea {
   position: absolute;
   inset: -12px -24px;
   background:
-    linear-gradient(90deg, rgba(5,5,8,0.56) 0%, rgba(5,5,8,0.18) 20%, rgba(5,5,8,0.18) 80%, rgba(5,5,8,0.56) 100%),
-    radial-gradient(circle at center, transparent 0%, rgba(5,5,8,0.18) 55%, rgba(5,5,8,0.42) 100%);
+    linear-gradient(90deg, rgba(5,5,8,0.22) 0%, rgba(5,5,8,0.05) 22%, rgba(5,5,8,0.05) 78%, rgba(5,5,8,0.22) 100%),
+    radial-gradient(circle at center, transparent 0%, rgba(5,5,8,0.08) 58%, rgba(5,5,8,0.22) 100%);
   pointer-events: none;
   z-index: -1;
 }
