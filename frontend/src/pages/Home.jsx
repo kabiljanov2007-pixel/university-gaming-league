@@ -39,6 +39,9 @@ function HeroSection() {
     <section className="hero-v2">
       {/* Circuit background */}
       <div className="hero-circuit-bg">
+        <div className="hero-character-backdrop hero-character-backdrop-left" />
+        <div className="hero-character-backdrop hero-character-backdrop-right" />
+        <div className="hero-backdrop-vignette" />
         <div className="circuit-grid" />
         <div className="circuit-trace-h circuit-trace-h1" />
         <div className="circuit-trace-h circuit-trace-h2" />
@@ -219,6 +222,54 @@ function HeroSection() {
 
         /* Circuit background */
         .hero-circuit-bg { position: absolute; inset: 0; pointer-events: none; }
+
+        .hero-character-backdrop {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: min(34vw, 420px);
+          background-size: cover;
+          background-repeat: no-repeat;
+          opacity: 0.34;
+          filter: saturate(1.15) contrast(1.08);
+          z-index: 0;
+        }
+
+        .hero-character-backdrop::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background:
+            linear-gradient(180deg, rgba(5, 5, 8, 0.18) 0%, rgba(5, 5, 8, 0.78) 100%),
+            linear-gradient(90deg, rgba(5, 5, 8, 0.12) 0%, rgba(5, 5, 8, 0.62) 100%);
+        }
+
+        .hero-character-backdrop-left {
+          left: 0;
+          background-image:
+            linear-gradient(135deg, rgba(0, 255, 255, 0.18), rgba(7, 14, 30, 0.2)),
+            url('/images/pubg-poster.jpg');
+          background-position: left center;
+          box-shadow: inset -80px 0 120px rgba(5, 5, 8, 0.95);
+        }
+
+        .hero-character-backdrop-right {
+          right: 0;
+          background-image:
+            linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(7, 14, 30, 0.24)),
+            url('/images/ff-poster.jpg');
+          background-position: right center;
+          box-shadow: inset 80px 0 120px rgba(5, 5, 8, 0.95);
+        }
+
+        .hero-backdrop-vignette {
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(circle at center, transparent 0%, rgba(5, 5, 8, 0.08) 44%, rgba(5, 5, 8, 0.74) 100%),
+            linear-gradient(90deg, rgba(5, 5, 8, 0.82) 0%, transparent 24%, transparent 76%, rgba(5, 5, 8, 0.82) 100%);
+          z-index: 0;
+        }
 
         .circuit-grid {
           position: absolute; inset: 0;
@@ -606,6 +657,7 @@ function HeroSection() {
         @media (max-width: 1100px) {
           .hero-three-col { grid-template-columns: 180px 1fr 180px; gap: 16px; }
           .game-panel { height: 400px; }
+          .hero-character-backdrop { width: min(32vw, 320px); opacity: 0.28; }
         }
         @media (max-width: 860px) {
           .hero-three-col { grid-template-columns: 1fr; }
@@ -614,9 +666,17 @@ function HeroSection() {
           .game-panel-footer { border-top: none; border-left: 1px solid rgba(255,255,255,0.07); flex-direction: row; gap: 12px; padding: 12px 16px; }
           .hero-info-row { grid-template-columns: 1fr; gap: 1px; }
           .uni-header { flex-direction: column; text-align: center; }
+          .hero-character-backdrop {
+            width: 42vw;
+            opacity: 0.22;
+          }
         }
         @media (max-width: 640px) {
           .hero-three-col { gap: 12px; }
+          .hero-character-backdrop {
+            width: 50vw;
+            opacity: 0.18;
+          }
           .game-panel {
             display: flex;
             height: auto;

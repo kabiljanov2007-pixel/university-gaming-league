@@ -202,6 +202,11 @@ input, select, textarea {
   transform: translateX(120%);
 }
 
+.btn:hover {
+  letter-spacing: 0.1em;
+  animation: cyber-button-pulse 1.2s ease-in-out infinite;
+}
+
 /* Cards */
 .card {
   background: var(--glass-bg);
@@ -295,33 +300,84 @@ input, select, textarea {
 /* Page hero */
 .page-hero {
   padding: 120px 0 60px;
-  background: linear-gradient(180deg, rgba(7, 14, 30, 0.96) 0%, rgba(5, 5, 8, 1) 100%);
+  background:
+    radial-gradient(circle at top, rgba(0, 255, 255, 0.06), transparent 26%),
+    radial-gradient(circle at 80% 0%, rgba(255, 0, 255, 0.08), transparent 24%),
+    linear-gradient(180deg, rgba(7, 14, 30, 0.96) 0%, rgba(5, 5, 8, 1) 100%);
   position: relative;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .page-hero::before {
   content: '';
   position: absolute;
-  top: -200px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 900px;
-  height: 500px;
-  background: radial-gradient(ellipse, rgba(255, 0, 255, 0.18) 0%, rgba(0, 255, 255, 0.06) 50%, transparent 70%);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(30vw, 360px);
+  background:
+    linear-gradient(90deg, rgba(5, 5, 8, 0.08), rgba(5, 5, 8, 0.74)),
+    linear-gradient(180deg, rgba(5, 5, 8, 0.08), rgba(5, 5, 8, 0.78)),
+    url('/images/pubg-poster.jpg');
+  background-size: cover;
+  background-position: left center;
+  background-repeat: no-repeat;
+  opacity: 0.34;
+  filter: saturate(1.22) contrast(1.14) brightness(1.02);
   pointer-events: none;
+  animation: hero-side-float-left 14s ease-in-out infinite;
+  z-index: 0;
 }
 
 .page-hero::after {
   content: '';
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: min(30vw, 360px);
+  background:
+    linear-gradient(270deg, rgba(5, 5, 8, 0.08), rgba(5, 5, 8, 0.74)),
+    linear-gradient(180deg, rgba(5, 5, 8, 0.08), rgba(5, 5, 8, 0.78)),
+    url('/images/ff-poster.jpg');
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+  opacity: 0.34;
+  filter: saturate(1.18) contrast(1.12) brightness(1.02);
+  pointer-events: none;
+  animation: hero-side-float-right 14s ease-in-out infinite;
+  z-index: 0;
+}
+
+.page-hero > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.page-hero > .container::before {
+  content: '';
+  position: absolute;
+  inset: -24px 0;
   background-image:
-    linear-gradient(rgba(0, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 44px 44px;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.92) 20%, rgba(0,0,0,0.92) 80%, transparent 100%);
+}
+
+.page-hero > .container::after {
+  content: '';
+  position: absolute;
+  inset: -12px -24px;
+  background:
+    linear-gradient(90deg, rgba(5,5,8,0.56) 0%, rgba(5,5,8,0.18) 20%, rgba(5,5,8,0.18) 80%, rgba(5,5,8,0.56) 100%),
+    radial-gradient(circle at center, transparent 0%, rgba(5,5,8,0.18) 55%, rgba(5,5,8,0.42) 100%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* Form styles */
@@ -430,6 +486,11 @@ input, select, textarea {
   50% { box-shadow: 0 0 40px rgba(0,212,255,0.9), 0 0 80px rgba(0,212,255,0.5); }
 }
 
+@keyframes cyber-button-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.08); }
+}
+
 @keyframes border-flow {
   0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
@@ -438,6 +499,16 @@ input, select, textarea {
 @keyframes glow-text {
   0%, 100% { text-shadow: 0 0 10px rgba(0,212,255,0.6), 0 0 30px rgba(0,212,255,0.3); }
   50% { text-shadow: 0 0 20px rgba(0,212,255,1), 0 0 50px rgba(0,212,255,0.6); }
+}
+
+@keyframes hero-side-float-left {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.32; }
+  50% { transform: translate3d(-10px, 8px, 0) scale(1.04); opacity: 0.4; }
+}
+
+@keyframes hero-side-float-right {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.32; }
+  50% { transform: translate3d(10px, -8px, 0) scale(1.04); opacity: 0.4; }
 }
 
 @keyframes scan-pass {
@@ -473,4 +544,12 @@ input, select, textarea {
 /* Tech text glow */
 .text-glow-cyan {
   animation: glow-text 3s ease-in-out infinite;
+}
+
+@media (max-width: 640px) {
+  .page-hero::before,
+  .page-hero::after {
+    width: 38vw;
+    opacity: 0.22;
+  }
 }
