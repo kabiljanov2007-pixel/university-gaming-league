@@ -18,6 +18,13 @@ const navItems = [
 ]
 
 const fmt = (iso) => new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })
+const fmtDateTime = (iso) => new Date(iso).toLocaleString('ru-RU', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+})
 
 export default function Admin() {
   const { admin, logout } = useAuth()
@@ -435,6 +442,9 @@ function AdminDashboard() {
 function AdminTeams() {
   const [teams, setTeams] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedTeam, setSelectedTeam] = useState(null)
+  const [detailsLoading, setDetailsLoading] = useState(false)
+  const [statusFilter, setStatusFilter] = useState('all')
 
   useEffect(() => {
     api.get('/teams/admin/all')
@@ -442,6 +452,18 @@ function AdminTeams() {
       .catch(err => console.error(err))
       .finally(() => setLoading(false))
   }, [])
+
+  const openTeamDetails = async (teamId) => {
+    setDetailsLoading(true)
+    try {
+      const res = await api.get(`/teams/admin/${teamId}`)
+      setSelectedTeam(res.data)
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Не удалось загрузить данные команды')
+    } finally {
+      setDetailsLoading(false)
+    }
+  }
 
   const updateStatus = async (id, status) => {
     try {
@@ -464,73 +486,166 @@ function AdminTeams() {
     }
   }
 
+  const filteredTeams = teams.filter((t) => statusFilter === 'all' ? true : t.status === statusFilter)
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <h1 className="admin-page-title">Управление командами</h1>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
+        <button
+          className={`btn ${statusFilter === 'all' ? 'btn-primary' : 'btn-secondary'}`}
+          style={{ padding: '8px 14px', fontSize: '0.72rem' }}
+          onClick={() => setStatusFilter('all')}
+        >
+          Все заявки ({teams.length})
+        </button>
+        <button
+          className={`btn ${statusFilter === 'pending' ? 'btn-primary' : 'btn-secondary'}`}
+          style={{ padding: '8px 14px', fontSize: '0.72rem' }}
+          onClick={() => setStatusFilter('pending')}
+        >
+          Только на проверке ({teams.filter((t) => t.status === 'pending').length})
+        </button>
+        <button
+          className={`btn ${statusFilter === 'approved' ? 'btn-primary' : 'btn-secondary'}`}
+          style={{ padding: '8px 14px', fontSize: '0.72rem' }}
+          onClick={() => setStatusFilter('approved')}
+        >
+          Принятые ({teams.filter((t) => t.status === 'approved').length})
+        </button>
+        <button
+          className={`btn ${statusFilter === 'rejected' ? 'btn-primary' : 'btn-secondary'}`}
+          style={{ padding: '8px 14px', fontSize: '0.72rem' }}
+          onClick={() => setStatusFilter('rejected')}
+        >
+          Отклонённые ({teams.filter((t) => t.status === 'rejected').length})
+        </button>
+      </div>
 
       {loading ? (
         <div className="admin-loading"><div className="loading-spinner" /><p>Загрузка...</p></div>
-      ) : teams.length === 0 ? (
+      ) : filteredTeams.length === 0 ? (
         <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: '48px', textAlign: 'center', color: 'var(--text-muted)' }}>
-          Заявок пока нет
+          По выбранному фильтру заявок нет
         </div>
       ) : (
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Команда</th>
-              <th>Дисциплина</th>
-              <th>Университет</th>
-              <th>Капитан</th>
-              <th>Игроков</th>
-              <th>Статус</th>
-              <th>Действия</th>
-            </tr>
-          </thead>
-          <tbody>
-            {teams.map(t => (
-              <tr key={t.id}>
-                <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{t.name}</td>
-                <td>{t.discipline_name}</td>
-                <td>{t.university}</td>
-                <td>{t.captain_name}</td>
-                <td style={{ textAlign: 'center' }}>{t.members_count}</td>
-                <td>
-                  <span className={`badge ${t.status === 'approved' ? 'badge-cyan' : 'badge-purple'}`}>
-                    {t.status === 'approved' ? 'Принята' : t.status === 'pending' ? 'Проверка' : 'Отклонена'}
-                  </span>
-                </td>
-                <td>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    {t.status === 'pending' && (
-                      <>
+        <>
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Команда</th>
+                <th>Дисциплина</th>
+                <th>Университет</th>
+                <th>Капитан</th>
+                <th>Игроков</th>
+                <th>Отправлено</th>
+                <th>Статус</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTeams.map(t => (
+                <tr key={t.id}>
+                  <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{t.name}</td>
+                  <td>{t.discipline_name}</td>
+                  <td>{t.university}</td>
+                  <td>{t.captain_name}</td>
+                  <td style={{ textAlign: 'center' }}>{t.members_count}</td>
+                  <td>{fmtDateTime(t.created_at)}</td>
+                  <td>
+                    <span className={`badge ${t.status === 'approved' ? 'badge-cyan' : 'badge-purple'}`}>
+                      {t.status === 'approved' ? 'Принята' : t.status === 'pending' ? 'Проверка' : 'Отклонена'}
+                    </span>
+                  </td>
+                  <td>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <button className="action-btn" onClick={() => openTeamDetails(t.id)} title="Проверить команду">
+                        <Eye size={14} />
+                      </button>
+                      {t.status === 'pending' && (
+                        <>
+                          <button className="action-btn success" onClick={() => updateStatus(t.id, 'approved')} title="Принять">
+                            <Check size={14} />
+                          </button>
+                          <button className="action-btn danger" onClick={() => updateStatus(t.id, 'rejected')} title="Отклонить">
+                            <X size={14} />
+                          </button>
+                        </>
+                      )}
+                      {t.status === 'approved' && (
+                        <button className="action-btn" onClick={() => updateStatus(t.id, 'pending')} title="Вернуть на проверку">
+                          <X size={14} />
+                        </button>
+                      )}
+                      {t.status === 'rejected' && (
                         <button className="action-btn success" onClick={() => updateStatus(t.id, 'approved')} title="Принять">
                           <Check size={14} />
                         </button>
-                        <button className="action-btn danger" onClick={() => updateStatus(t.id, 'rejected')} title="Отклонить">
-                          <X size={14} />
-                        </button>
-                      </>
-                    )}
-                    {t.status === 'approved' && (
-                      <button className="action-btn" onClick={() => updateStatus(t.id, 'pending')} title="Вернуть на проверку">
-                        <X size={14} />
+                      )}
+                      <button className="action-btn danger" onClick={() => deleteTeam(t.id, t.name)} title="Удалить">
+                        <Trash2 size={14} />
                       </button>
-                    )}
-                    {t.status === 'rejected' && (
-                      <button className="action-btn success" onClick={() => updateStatus(t.id, 'approved')} title="Принять">
-                        <Check size={14} />
-                      </button>
-                    )}
-                    <button className="action-btn danger" onClick={() => deleteTeam(t.id, t.name)} title="Удалить">
-                      <Trash2 size={14} />
-                    </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div style={{ marginTop: 16 }}>
+            {detailsLoading && (
+              <div className="admin-loading" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 20 }}>
+                <div className="loading-spinner" /><p>Загружаем данные команды...</p>
+              </div>
+            )}
+
+            {!detailsLoading && selectedTeam && (
+              <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-cyan)', borderRadius: 'var(--radius)', padding: 18 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 12, flexWrap: 'wrap' }}>
+                  <div>
+                    <div style={{ fontFamily: 'var(--font-game)', fontSize: '0.92rem', color: 'var(--cyan)', letterSpacing: '0.06em' }}>ПРОВЕРКА КОМАНДЫ</div>
+                    <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1.05rem' }}>{selectedTeam.name}</div>
+                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{selectedTeam.discipline_name} · {selectedTeam.university}</div>
                   </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <button className="action-btn" onClick={() => setSelectedTeam(null)} title="Закрыть">
+                    <X size={14} />
+                  </button>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: 14 }}>
+                  <div style={{ border: '1px solid var(--border)', borderRadius: '10px', padding: 12, background: 'rgba(255,255,255,0.02)' }}>
+                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: 4 }}>Капитан</div>
+                    <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{selectedTeam.captain_name}</div>
+                  </div>
+                  <div style={{ border: '1px solid var(--border)', borderRadius: '10px', padding: 12, background: 'rgba(255,255,255,0.02)' }}>
+                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: 4 }}>Телефон</div>
+                    <div style={{ color: 'var(--text-primary)' }}>{selectedTeam.captain_phone || 'Не указан'}</div>
+                  </div>
+                  <div style={{ border: '1px solid var(--border)', borderRadius: '10px', padding: 12, background: 'rgba(255,255,255,0.02)' }}>
+                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: 4 }}>Telegram</div>
+                    <div style={{ color: 'var(--text-primary)' }}>{selectedTeam.captain_telegram || 'Не указан'}</div>
+                  </div>
+                </div>
+
+                <div style={{ fontFamily: 'var(--font-game)', fontSize: '0.78rem', color: 'var(--text-secondary)', letterSpacing: '0.08em', marginBottom: 8 }}>
+                  УЧАСТНИКИ КОМАНДЫ
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+                  {(selectedTeam.members || []).map((m, i) => (
+                    <div key={m.id || i} style={{ border: `1px solid ${m.is_captain ? 'var(--border-cyan)' : 'var(--border)'}`, borderRadius: '10px', padding: 12, background: m.is_captain ? 'rgba(0,255,255,0.08)' : 'rgba(255,255,255,0.02)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
+                        <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{m.name}</div>
+                        {m.is_captain && <span className="badge badge-cyan" style={{ fontSize: '0.62rem', padding: '2px 8px' }}>КАПИТАН</span>}
+                      </div>
+                      <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Ник: {m.game_nickname}</div>
+                      <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Студ. билет: {m.student_id}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </>
       )}
     </motion.div>
   )
