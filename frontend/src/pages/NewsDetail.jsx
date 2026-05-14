@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ChevronLeft, Calendar, Tag, Share2 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import api from '../hooks/useApi'
+import { findPublicNews } from '../data/news'
 
 const fmt = (iso) => new Date(iso).toLocaleDateString('ru-RU', {
   day: 'numeric', month: 'long', year: 'numeric',
@@ -25,34 +24,14 @@ const renderContent = (text) => {
 
 export default function NewsDetail() {
   const { id } = useParams()
-  const [article, setArticle] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [notFound, setNotFound] = useState(false)
-
-  useEffect(() => {
-    setLoading(true)
-    setNotFound(false)
-    api.get(`/news/${id}`)
-      .then(res => setArticle(res.data))
-      .catch(err => {
-        if (err.response?.status === 404) setNotFound(true)
-      })
-      .finally(() => setLoading(false))
-  }, [id])
+  const article = findPublicNews(id)
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href)
     toast.success('Ссылка скопирована!')
   }
 
-  if (loading) return (
-    <div className="container" style={{ padding: '120px 24px', textAlign: 'center' }}>
-      <div style={{ width: 40, height: 40, border: '3px solid var(--border)', borderTopColor: 'var(--cyan)', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </div>
-  )
-
-  if (notFound || !article) return (
+  if (!article) return (
     <div className="container" style={{ padding: '120px 24px', textAlign: 'center' }}>
       <h2 style={{ fontFamily: 'var(--font-game)', color: 'var(--text-muted)' }}>Статья не найдена</h2>
       <Link to="/news" className="btn btn-secondary" style={{ marginTop: 24 }}>

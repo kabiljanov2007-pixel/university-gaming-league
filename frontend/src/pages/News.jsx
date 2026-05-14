@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Newspaper, ChevronRight, Calendar, Tag, Search } from 'lucide-react'
-import api from '../hooks/useApi'
+import { publicNews } from '../data/news'
 
 const tagColors = { 'Анонс': 'cyan', 'Официально': 'purple', 'Организация': 'purple', 'Партнёры': 'cyan' }
 
@@ -14,18 +14,9 @@ const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }
 const stagger = { visible: { transition: { staggerChildren: 0.08 } } }
 
 export default function News() {
-  const [news, setNews] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [news] = useState(publicNews)
   const [search, setSearch] = useState('')
   const [activeTag, setActiveTag] = useState('all')
-
-  useEffect(() => {
-    api.get('/news')
-      .then(res => { setNews(res.data.items || []); setError(null) })
-      .catch(err => setError(err.response?.data?.message || 'Ошибка загрузки'))
-      .finally(() => setLoading(false))
-  }, [])
 
   const tags = ['all', ...new Set(news.map(n => n.tag))]
 
@@ -80,15 +71,7 @@ export default function News() {
             </div>
           </div>
 
-          {loading ? (
-            <div className="empty-state">
-              <div className="loading-spinner" />
-              <p>Загрузка новостей...</p>
-            </div>
-          ) : error ? (
-            <div className="empty-state"><Newspaper size={48} /><p>{error}</p></div>
-          ) : (
-            <motion.div initial="hidden" animate="visible" variants={stagger}>
+          <motion.div initial="hidden" animate="visible" variants={stagger}>
               {featured && (
                 <motion.div variants={fadeUp} style={{ marginBottom: 32 }}>
                   <Link to={`/news/${featured.id}`} className="news-featured-card">
@@ -132,8 +115,7 @@ export default function News() {
                   <p>Новостей не найдено</p>
                 </div>
               )}
-            </motion.div>
-          )}
+          </motion.div>
         </div>
       </section>
 

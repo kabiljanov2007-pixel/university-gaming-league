@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -6,7 +5,7 @@ import {
   ChevronRight, Gamepad2, Target, Clock, Star
 } from 'lucide-react'
 import Countdown from '../components/Countdown'
-import api from '../hooks/useApi'
+import { publicNews } from '../data/news'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -1040,13 +1039,7 @@ function AboutSection() {
 }
 
 function NewsPreview() {
-  const [news, setNews] = useState([])
-
-  useEffect(() => {
-    api.get('/news?limit=3')
-      .then(res => setNews(res.data.items || []))
-      .catch(() => {})
-  }, [])
+  const news = publicNews.slice(0, 3)
 
   return (
     <section className="section news-preview-section">
