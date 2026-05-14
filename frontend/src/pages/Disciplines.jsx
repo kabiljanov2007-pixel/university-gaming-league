@@ -89,7 +89,7 @@ export default function Disciplines() {
               Выбери свою <span className="gradient-cyan">дисциплину</span>
             </h1>
             <p className="section-subtitle">
-              Два топовых мобильных Battle Royale. Выбери игру, собери команду и побори за призы!
+              Два топовых Battle Royale. Выбери игру, собери команду и побори за призы!
             </p>
           </motion.div>
         </div>

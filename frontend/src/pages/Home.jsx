@@ -787,7 +787,7 @@ function DisciplinesSection() {
             </span>
             <h2 className="section-title">Выбери свою <span className="gradient-cyan">игру</span></h2>
             <p className="section-subtitle">
-              Два топовых мобильных Battle Royale — выбери дисциплину и веди свою команду к победе
+              Два топовых Battle Royale — выбери дисциплину и веди свою команду к победе
             </p>
           </motion.div>
 
