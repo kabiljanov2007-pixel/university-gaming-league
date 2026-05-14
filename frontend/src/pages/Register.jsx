@@ -556,7 +556,7 @@ function Step1({ register, errors }) {
           />
           {errors.university && <p className="form-error">{errors.university.message}</p>}
           <p style={{ marginTop: 8, fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            Пример: Школа №1 им. М. Бабкина, К.Ш. Токтоматова, МНУ.
+            Пример: Школа №1 им. М. Бабкина, К.Ш. Токтоматова МНУ.
           </p>
         </div>
 
