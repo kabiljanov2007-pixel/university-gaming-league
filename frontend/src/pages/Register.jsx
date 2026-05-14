@@ -551,10 +551,13 @@ function Step1({ register, errors }) {
           <label className="form-label">Школа или университет *</label>
           <input
             className={`form-input ${errors.university ? 'error' : ''}`}
-            placeholder="Например: Школа №24 или МНУ"
+            placeholder="Например: Школа №1 им. М. Бабкина / К.Ш. Токтоматова / МНУ"
             {...register('university', { required: 'Введите название школы или университета', minLength: { value: 3, message: 'Минимум 3 символа' } })}
           />
           {errors.university && <p className="form-error">{errors.university.message}</p>}
+          <p style={{ marginTop: 8, fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            Пример: Школа №1 им. М. Бабкина, К.Ш. Токтоматова, МНУ.
+          </p>
         </div>
 
         <div className="form-group">
