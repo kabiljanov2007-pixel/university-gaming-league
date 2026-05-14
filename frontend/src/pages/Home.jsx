@@ -935,7 +935,7 @@ function TimelineSection() {
   const events = [
     { date: '14–20 МАЯ', title: 'Регистрация команд', desc: 'Подай заявку с командой из 4 игроков', icon: <Users size={20} />, color: 'cyan' },
     { date: '22 МАЯ · 09:30', title: 'Регистрация участников на месте', desc: 'Подтверждение команд в большом актовом зале', icon: <Clock size={20} />, color: 'purple' },
-    { date: '22 МАЯ · 10:00', title: 'Начало турнира', desc: 'Групповой этап, плей-офф и финал', icon: <Trophy size={20} />, color: 'gold' },
+    { date: '22 МАЯ · 10:00', title: 'Начало турнира', desc: 'Battle Royale. Формат проведения: пока неизвестно', icon: <Trophy size={20} />, color: 'gold' },
     { date: '22 МАЯ', title: 'Церемония награждения', desc: 'Дипломы, медали, кубки и специальная награда', icon: <Star size={20} />, color: 'gold' },
   ]
 
@@ -1012,7 +1012,7 @@ function AboutSection() {
               Почему <span className="gradient-cyan">University Gaming League</span>?
             </h2>
             <p className="section-subtitle">
-              Первый официальный университетский турнир по мобильному киберспорту в Кыргызстане
+              Университетский турнир по киберспорту в Кыргызстане
             </p>
           </motion.div>
 

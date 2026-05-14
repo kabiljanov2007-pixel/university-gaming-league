@@ -15,12 +15,12 @@ const disciplines = [
     posterLabel: 'Эрангель · PUBG Mobile',
     prize: 'TBD',
     prizeBreakdown: [
-      { place: '1 место', amount: '🥇 Кубок + Медаль', color: 'gold' },
-      { place: '2 место', amount: '🥈 Медаль', color: 'silver' },
-      { place: '3 место', amount: '🥉 Медаль', color: 'bronze' },
+      { place: '1 место', amount: '🥇 Кубок + Медаль + Диплом + Специальная награда', color: 'gold' },
+      { place: '2 место', amount: '🥈 Медаль + Диплом', color: 'silver' },
+      { place: '3 место', amount: '🥉 Медаль + Диплом', color: 'bronze' },
     ],
     teamSize: 4,
-    format: 'Squads (4 человека)',
+    format: 'Battle Royale (4 игрока в команде)',
     rounds: 'Пока неизвестно',
     duration: 'Пока неизвестно',
     rules: [
@@ -35,7 +35,7 @@ const disciplines = [
       'Наличие смартфона или планшета',
       'Согласие с правилами турнира',
     ],
-    desc: 'Самый популярный мобильный Battle Royale. 64 команды, 1 выживший победитель. Тактика, координация и точность стрельбы — вот что определяет чемпиона. PUBG Mobile — это про командную работу и стратегическое мышление.',
+    desc: 'Battle Royale в командном формате 4 игрока. Здесь важны координация, тактика и командная дисциплина. Побеждает не одиночка, а сыгранная команда.',
   },
   {
     id: 'freefire',
@@ -46,12 +46,12 @@ const disciplines = [
     posterLabel: 'Бермуды · Free Fire',
     prize: 'TBD',
     prizeBreakdown: [
-      { place: '1 место', amount: '🥇 Кубок + Медаль', color: 'gold' },
-      { place: '2 место', amount: '🥈 Медаль', color: 'silver' },
-      { place: '3 место', amount: '🥉 Медаль', color: 'bronze' },
+      { place: '1 место', amount: '🥇 Кубок + Медаль + Диплом + Специальная награда', color: 'gold' },
+      { place: '2 место', amount: '🥈 Медаль + Диплом', color: 'silver' },
+      { place: '3 место', amount: '🥉 Медаль + Диплом', color: 'bronze' },
     ],
     teamSize: 4,
-    format: 'Squads (4 человека)',
+    format: 'Battle Royale (4 игрока в команде)',
     rounds: 'Пока неизвестно',
     duration: 'Пока неизвестно',
     rules: [

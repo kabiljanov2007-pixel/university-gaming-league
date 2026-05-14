@@ -38,7 +38,7 @@ const faqs = [
       },
       {
         q: 'Какой формат турнира?',
-        a: 'Групповой этап → Полуфинал → Финал. Точный формат определения победителей пока уточняется.',
+        a: 'Формат проведения: пока неизвестно. Дисциплины проходят в режиме Battle Royale.',
       },
       {
         q: 'Нужно ли приносить собственное устройство?',
@@ -154,10 +154,10 @@ export default function FAQ() {
                 <a href="https://t.me/kabilzhanovv" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginBottom: 10 }}>
                   Telegram @kabilzhanovv
                 </a>
-                <a href="https://wa.me/996755041207" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', marginBottom: 10 }}>
+                <a href="https://wa.me/996755041207" target="_blank" rel="noopener noreferrer" className="btn btn-secondary faq-contact-link" style={{ width: '100%', justifyContent: 'center', marginBottom: 10 }}>
                   WhatsApp +996 755 041 207
                 </a>
-                <a href="mailto:universitygamingleaguemnu@gmail.com" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', fontSize: '0.78rem' }}>
+                <a href="mailto:universitygamingleaguemnu@gmail.com" className="btn btn-secondary faq-contact-link" style={{ width: '100%', justifyContent: 'center', fontSize: '0.78rem' }}>
                   universitygamingleaguemnu@gmail.com
                 </a>
               </div>
@@ -278,6 +278,19 @@ export default function FAQ() {
         .faq-register-card {
           border-color: var(--border-purple);
           background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, var(--bg-card) 100%);
+        }
+
+        .faq-contact-link {
+          font-family: var(--font-body);
+          text-transform: none;
+          letter-spacing: normal;
+          clip-path: none;
+          border-radius: 10px;
+          padding: 12px 14px;
+          line-height: 1.35;
+          white-space: normal;
+          word-break: break-word;
+          overflow-wrap: anywhere;
         }
 
         @media (max-width: 768px) {

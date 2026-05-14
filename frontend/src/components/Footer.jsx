@@ -24,7 +24,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="footer-desc">
-              Первый университетский турнир по мобильному киберспорту в Кыргызстане. Покажи на что ты способен!
+              Университетский турнир по киберспорту в Кыргызстане. Покажи на что ты способен!
             </p>
           </div>
 
@@ -241,6 +241,8 @@ export default function Footer() {
         .footer-contacts a {
           color: var(--text-secondary);
           transition: color var(--transition);
+          word-break: break-word;
+          overflow-wrap: anywhere;
         }
 
         .footer-contacts a:hover { color: var(--cyan); }
