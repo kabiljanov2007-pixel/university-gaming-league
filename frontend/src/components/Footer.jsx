@@ -66,7 +66,7 @@ export default function Footer() {
             <ul className="footer-contacts">
               <li>
                 <MapPin size={16} className="contact-icon" />
-                <span>Университет им. К.Ш. Токтоматова, большой актовый зал, Манас</span>
+                <span>Университет им. К.Ш. Токтоматова, Манас</span>
               </li>
               <li>
                 <Mail size={16} className="contact-icon" />
