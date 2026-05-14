@@ -33,7 +33,7 @@ const mockBracket = {
 }
 
 export default function Results() {
-  const tournamentDate = new Date('2026-05-15')
+  const tournamentDate = new Date('2026-05-22')
   const now = new Date()
   const isUpcoming = now < tournamentDate
 
@@ -51,7 +51,7 @@ export default function Results() {
             </h1>
             <p className="section-subtitle">
               {isUpcoming
-                ? 'Турнир состоится 15 мая 2026. Следи за результатами в реальном времени!'
+                ? 'Турнир состоится 22 мая 2026. Следи за результатами в реальном времени!'
                 : 'Результаты и статистика University Gaming League 2026'}
             </p>
           </motion.div>
@@ -85,7 +85,7 @@ function UpcomingView() {
         Скоро <span className="gradient-cyan">начнётся</span>
       </h2>
       <p style={{ color: 'var(--text-secondary)', maxWidth: 400, textAlign: 'center', lineHeight: 1.7 }}>
-        Турнирная сетка и результаты будут опубликованы 15 мая 2026 в день проведения турнира.
+        Турнирная сетка и результаты будут опубликованы 22 мая 2026 в день проведения турнира.
       </p>
 
       <div className="upcoming-info-grid">
@@ -93,7 +93,7 @@ function UpcomingView() {
           { icon: <Users size={20} />, label: 'PUBG Mobile', value: '16 команд' },
           { icon: <Users size={20} />, label: 'Free Fire', value: '16 команд' },
           { icon: <Swords size={20} />, label: 'Формат', value: 'Групповой + ПО' },
-          { icon: <Trophy size={20} />, label: 'Победитель', value: 'TBD — 15 мая' },
+          { icon: <Trophy size={20} />, label: 'Победитель', value: 'TBD — 22 мая' },
         ].map((item, i) => (
           <div key={i} className="upcoming-info-card">
             <div style={{ color: 'var(--cyan)' }}>{item.icon}</div>

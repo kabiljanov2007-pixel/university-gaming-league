@@ -31,7 +31,7 @@ const disciplines = [
     ],
     requirements: [
       'Аккаунт уровня не ниже 30',
-      'Студент университета Кыргызстана',
+      'Студент или выпускник 11 класса',
       'Наличие смартфона или планшета',
       'Согласие с правилами турнира',
     ],
@@ -62,7 +62,7 @@ const disciplines = [
     ],
     requirements: [
       'Аккаунт уровня не ниже 20',
-      'Студент университета Кыргызстана',
+      'Студент или выпускник 11 класса',
       'Наличие смартфона или планшета',
       'Согласие с правилами турнира',
     ],
@@ -126,7 +126,7 @@ export default function Disciplines() {
                   <Trophy size={28} className="prize-icon" />
                   <div className="prize-label">Призы</div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', textAlign: 'center', lineHeight: 1.5 }}>
-                    Медали · Кубки<br />Призы от партнёров
+                    Дипломы · Медали · Кубки<br />Special Surprise
                   </div>
                   <div className="prize-breakdown">
                     {d.prizeBreakdown.map((p, i) => (

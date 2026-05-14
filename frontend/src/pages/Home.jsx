@@ -92,7 +92,7 @@ function HeroSection() {
         <img src="/images/logo-mnu.png" alt="МНУ" className="uni-logo-img" />
         <div className="uni-text">
           <strong>УНИВЕРСИТЕТ ИМЕНИ К.Ш. ТОКТОМАТОВА</strong>
-          <span>приглашает принять участие в студенческом киберспортивном турнире</span>
+          <span>приглашает студентов и выпускников 11 класса на киберспортивный турнир</span>
         </div>
         <img src="/images/logo-itu.png" alt="ИТУ" className="uni-logo-img" />
       </motion.div>
@@ -133,7 +133,7 @@ function HeroSection() {
         >
           <motion.div variants={fadeUp}>
             <span className="badge badge-gold hero-top-badge">
-              <Zap size={12} /> 15 МАЯ 2026 · МАНАС
+              <Zap size={12} /> 22 МАЯ 2026 · МАНАС
             </span>
           </motion.div>
 
@@ -206,21 +206,21 @@ function HeroSection() {
           <Calendar size={22} className="ib-icon" />
           <div>
             <span className="ib-label">ТУРНИР СОСТОИТСЯ</span>
-            <strong className="ib-value">15 МАЯ 2026 ГОДА</strong>
+            <strong className="ib-value">22 МАЯ 2026 ГОДА</strong>
           </div>
         </div>
         <div className="info-box info-purple">
           <MapPin size={22} className="ib-icon" />
           <div>
             <span className="ib-label">МЕСТО ПРОВЕДЕНИЯ</span>
-            <strong className="ib-value">УЛ. ТАРСУС, 1А · МАНАС</strong>
+            <strong className="ib-value">БОЛЬШОЙ АКТОВЫЙ ЗАЛ · УНИВЕРСИТЕТ ИМ. К.Ш. ТОКТОМАТОВА</strong>
           </div>
         </div>
         <div className="info-box info-cyan">
           <Clock size={22} className="ib-icon" />
           <div>
             <span className="ib-label">ПРИЁМ ЗАЯВОК</span>
-            <strong className="ib-value">1 МАЯ — 12 МАЯ 2026</strong>
+            <strong className="ib-value">14 МАЯ — 20 МАЯ 2026</strong>
           </div>
         </div>
       </motion.div>
@@ -233,7 +233,7 @@ function HeroSection() {
         transition={{ delay: 0.9 }}
       >
         <Trophy size={18} />
-        ПОБЕДИТЕЛИ БУДУТ НАГРАЖДЕНЫ ДИПЛОМАМИ, МЕДАЛЯМИ И КУБКАМИ
+        ПОБЕДИТЕЛИ БУДУТ НАГРАЖДЕНЫ ДИПЛОМАМИ, МЕДАЛЯМИ, КУБКАМИ И SURPRISE
         <Trophy size={18} />
       </motion.div>
 
@@ -810,7 +810,7 @@ function DisciplinesSection() {
                     <div className="meta-item"><Users size={14} /><span>{d.players}</span></div>
                     <div className="meta-item"><Target size={14} /><span>{d.format}</span></div>
                     <div className="meta-item"><MapPin size={14} /><span>{d.map}</span></div>
-                    <div className="meta-item"><Trophy size={14} /><span>Медали · Кубки</span></div>
+                    <div className="meta-item"><Trophy size={14} /><span>Дипломы · Медали · Кубки · Surprise</span></div>
                   </div>
                   <div className="discipline-cta">Подробнее <ChevronRight size={16} /></div>
                 </Link>
@@ -933,10 +933,10 @@ function DisciplinesSection() {
 
 function TimelineSection() {
   const events = [
-    { date: '1–12 МАЯ', title: 'Регистрация команд', desc: 'Подай заявку с командой из 4 игроков', icon: <Users size={20} />, color: 'cyan' },
-    { date: 'СКОРО', title: 'Подготовка', desc: 'Дата и детали уточняются', icon: <Target size={20} />, color: 'purple' },
-    { date: '15 МАЯ', title: 'День турнира', desc: 'Групповой этап, плей-офф и финал', icon: <Trophy size={20} />, color: 'gold' },
-    { date: '15 МАЯ', title: 'Церемония награждения', desc: 'Вручение медалей и кубков победителям', icon: <Star size={20} />, color: 'gold' },
+    { date: '14–20 МАЯ', title: 'Регистрация команд', desc: 'Подай заявку с командой из 4 игроков', icon: <Users size={20} />, color: 'cyan' },
+    { date: '22 МАЯ · 09:30', title: 'Регистрация участников на месте', desc: 'Подтверждение команд в большом актовом зале', icon: <Clock size={20} />, color: 'purple' },
+    { date: '22 МАЯ · 10:00', title: 'Начало турнира', desc: 'Групповой этап, плей-офф и финал', icon: <Trophy size={20} />, color: 'gold' },
+    { date: '22 МАЯ', title: 'Церемония награждения', desc: 'Дипломы, медали, кубки и специальная награда', icon: <Star size={20} />, color: 'gold' },
   ]
 
   return (
@@ -994,10 +994,10 @@ function TimelineSection() {
 
 function AboutSection() {
   const features = [
-    { icon: <MapPin size={24} />, title: 'Локация', desc: 'ул. Тарсус, 1а, Манас. Кампус университета им. К.Ш. Токтоматова' },
+    { icon: <MapPin size={24} />, title: 'Локация', desc: 'Университет им. К.Ш. Токтоматова, большой актовый зал, Манас' },
     { icon: <Clock size={24} />, title: 'Формат', desc: 'Пока неизвестно' },
-    { icon: <Users size={24} />, title: 'Участники', desc: 'Студенты университетов Кыргызстана. Команды по 4 человека' },
-    { icon: <Trophy size={24} />, title: 'Призы', desc: 'Дипломы, медали, кубки и специальные награды от партнёров турнира' },
+    { icon: <Users size={24} />, title: 'Участники', desc: 'Студенты и выпускники 11-го класса. Команды по 4 человека' },
+    { icon: <Trophy size={24} />, title: 'Призы', desc: 'Дипломы, медали, кубки и специальная награда' },
   ]
 
   return (
@@ -1118,14 +1118,14 @@ function CTASection() {
           <div className="cta-orb" />
           <div className="cta-content">
             <span className="badge badge-gold" style={{ marginBottom: '20px' }}>
-              <Clock size={12} /> Регистрация: 1–12 мая 2026
+              <Clock size={12} /> Регистрация: 14–20 мая 2026
             </span>
             <h2 className="cta-title">
               Готов побороться за <span className="gradient-cyan">победу</span>?
             </h2>
             <p className="cta-desc">
               Собери команду из 4 игроков и зарегистрируйся уже сейчас.
-              Турнир пройдёт 15 мая в Манасе!
+              Турнир пройдёт 22 мая в большом актовом зале университета им. К.Ш. Токтоматова!
             </p>
             <div className="cta-actions">
               <Link to="/register" className="btn btn-primary" style={{ padding: '14px 36px', fontSize: '0.85rem' }}>

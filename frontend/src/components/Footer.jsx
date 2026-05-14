@@ -51,11 +51,11 @@ export default function Footer() {
             <h4 className="footer-heading" style={{ marginTop: '24px' }}>Важные даты</h4>
             <ul className="footer-dates">
               <li>
-                <span className="date-badge">01–12 МАЯ</span>
+                <span className="date-badge">14–20 МАЯ</span>
                 <span>Регистрация команд</span>
               </li>
               <li>
-                <span className="date-badge">15 МАЯ</span>
+                <span className="date-badge">22 МАЯ</span>
                 <span>День турнира</span>
               </li>
             </ul>
@@ -66,7 +66,7 @@ export default function Footer() {
             <ul className="footer-contacts">
               <li>
                 <MapPin size={16} className="contact-icon" />
-                <span>мкр. Спутник, ул. Тарсус, 1а, Манас, Кыргызстан</span>
+                <span>Университет им. К.Ш. Токтоматова, большой актовый зал, Манас</span>
               </li>
               <li>
                 <Mail size={16} className="contact-icon" />

@@ -245,10 +245,6 @@ export default function Teams() {
                           <span className="modal-detail-label">Имя</span>
                           <span className="modal-detail-val">{m.name}</span>
                         </div>
-                        <div className="modal-detail-row">
-                          <span className="modal-detail-label">Студ. билет</span>
-                          <span className="modal-detail-val">{m.student_id}</span>
-                        </div>
                       </div>
                     </div>
                   ))}

@@ -27,10 +27,10 @@ export default function Register() {
       contactPhone: '',
       contactEmail: '',
       members: [
-        { name: '', gameNickname: '', studentId: '' },
-        { name: '', gameNickname: '', studentId: '' },
-        { name: '', gameNickname: '', studentId: '' },
-        { name: '', gameNickname: '', studentId: '' },
+        { name: '', gameNickname: '' },
+        { name: '', gameNickname: '' },
+        { name: '', gameNickname: '' },
+        { name: '', gameNickname: '' },
       ],
     },
   })
@@ -43,7 +43,7 @@ export default function Register() {
     if (step === 0) fields = ['discipline']
     if (step === 1) fields = ['teamName', 'university', 'contactName', 'contactPhone']
     if (step === 2) fields = watchedData.members.map((_, i) => [ // eslint-disable-line
-      `members.${i}.name`, `members.${i}.gameNickname`, `members.${i}.studentId`
+      `members.${i}.name`, `members.${i}.gameNickname`
     ]).flat()
 
     const valid = await trigger(fields)
@@ -78,7 +78,7 @@ export default function Register() {
               Регистрация <span className="gradient-cyan">команды</span>
             </h1>
             <p className="section-subtitle">
-              Заполни форму, чтобы зарегистрировать свою команду. Регистрация открыта с 1 по 12 мая.
+              Заполни форму, чтобы зарегистрировать свою команду. Регистрация открыта с 14 по 20 мая.
             </p>
           </motion.div>
         </div>
@@ -548,11 +548,11 @@ function Step1({ register, errors }) {
         </div>
 
         <div className="form-group full-width">
-          <label className="form-label">Университет *</label>
+          <label className="form-label">Школа или университет *</label>
           <input
             className={`form-input ${errors.university ? 'error' : ''}`}
-            placeholder="Название университета"
-            {...register('university', { required: 'Введите название университета', minLength: { value: 3, message: 'Минимум 3 символа' } })}
+            placeholder="Например: Школа №24 или МНУ"
+            {...register('university', { required: 'Введите название школы или университета', minLength: { value: 3, message: 'Минимум 3 символа' } })}
           />
           {errors.university && <p className="form-error">{errors.university.message}</p>}
         </div>
@@ -578,6 +578,9 @@ function Step1({ register, errors }) {
             })}
           />
           {errors.contactPhone && <p className="form-error">{errors.contactPhone.message}</p>}
+          <p style={{ marginTop: 8, fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            Оставьте номер, чтобы мы могли с вами связаться.
+          </p>
         </div>
 
         <div className="form-group full-width">
@@ -622,15 +625,6 @@ function Step2({ register, errors, fields }) {
               />
               {errors.members?.[i]?.gameNickname && <p className="form-error">{errors.members[i].gameNickname.message}</p>}
             </div>
-            <div className="form-group full-width">
-              <label className="form-label">Номер студ. билета *</label>
-              <input
-                className={`form-input ${errors.members?.[i]?.studentId ? 'error' : ''}`}
-                placeholder="Например: 2022-0001"
-                {...register(`members.${i}.studentId`, { required: 'Обязательное поле' })}
-              />
-              {errors.members?.[i]?.studentId && <p className="form-error">{errors.members[i].studentId.message}</p>}
-            </div>
           </div>
         </div>
       ))}
@@ -662,7 +656,7 @@ function Step3({ data }) {
             <span className="confirm-val">{data.teamName}</span>
           </div>
           <div className="confirm-row">
-            <span className="confirm-key">Университет</span>
+            <span className="confirm-key">Школа/Университет</span>
             <span className="confirm-val">{data.university}</span>
           </div>
           <div className="confirm-row">
@@ -691,10 +685,6 @@ function Step3({ data }) {
                   <span className="player-info-label">Имя</span>
                   <span className="player-info-val">{m.name || '—'}</span>
                 </div>
-                <div className="player-info-row">
-                  <span className="player-info-label">Студ. билет</span>
-                  <span className="player-info-val">{m.studentId || '—'}</span>
-                </div>
               </div>
             </div>
           ))}
@@ -702,7 +692,7 @@ function Step3({ data }) {
       </div>
 
       <p className="agree-text">
-        Нажимая «Отправить заявку», вы подтверждаете, что все данные верны, все участники являются студентами и согласны с правилами турнира University Gaming League 2026.
+        Нажимая «Отправить заявку», вы подтверждаете, что все данные верны, а участники согласны с правилами турнира University Gaming League 2026.
       </p>
     </div>
   )

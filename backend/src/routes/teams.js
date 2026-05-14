@@ -74,13 +74,12 @@ router.post('/register',
   [
     body('discipline').isIn(['pubg', 'freefire']).withMessage('Выбери дисциплину'),
     body('teamName').trim().isLength({ min: 2, max: 100 }).withMessage('Название команды: 2–100 символов'),
-    body('university').trim().notEmpty().withMessage('Выбери университет'),
+    body('university').trim().notEmpty().withMessage('Укажите школу или университет'),
     body('contactName').trim().notEmpty().withMessage('Введите имя капитана'),
     body('contactPhone').trim().notEmpty().withMessage('Введите номер телефона'),
     body('members').isArray({ min: 4, max: 4 }).withMessage('Команда должна состоять из 4 игроков'),
     body('members.*.name').trim().notEmpty().withMessage('Укажите имя каждого игрока'),
     body('members.*.gameNickname').trim().notEmpty().withMessage('Укажите ник каждого игрока'),
-    body('members.*.studentId').trim().notEmpty().withMessage('Укажите номер студ. билета'),
   ],
   validate,
   async (req, res) => {
@@ -130,7 +129,7 @@ router.post('/register',
         await client.query(`
           INSERT INTO team_members (team_id, name, game_nickname, student_id, is_captain)
           VALUES ($1, $2, $3, $4, $5)
-        `, [teamId, m.name, m.gameNickname, m.studentId, i === 0])
+        `, [teamId, m.name, m.gameNickname, m.studentId || '—', i === 0])
       }
 
       await client.query('COMMIT')

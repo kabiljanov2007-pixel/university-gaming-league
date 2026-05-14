@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from 'react'
 import { motion } from 'framer-motion'
 
-const TOURNAMENT_DATE = new Date('2026-05-15T09:00:00')
+const TOURNAMENT_DATE = new Date('2026-05-22T10:00:00')
 
 function pad(n) { return String(n).padStart(2, '0') }
 

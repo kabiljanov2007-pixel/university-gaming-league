@@ -346,6 +346,45 @@ export default function Admin() {
         @media (max-width: 1024px) {
           .admin-stat-grid { grid-template-columns: repeat(2, 1fr); }
         }
+
+        @media (max-width: 900px) {
+          .admin-layout { flex-direction: column; }
+          .admin-sidebar {
+            position: sticky;
+            width: 100%;
+            top: 0;
+            bottom: auto;
+            height: auto;
+            border-right: none;
+            border-bottom: 1px solid var(--border);
+          }
+          .admin-logo { padding: 14px 16px; }
+          .admin-nav {
+            flex-direction: row;
+            overflow-x: auto;
+            padding: 10px;
+            gap: 8px;
+          }
+          .admin-nav-item {
+            white-space: nowrap;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+          }
+          .admin-user { padding: 12px 16px; }
+          .admin-main {
+            margin-left: 0;
+            padding: 18px 14px 24px;
+          }
+          .admin-table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .admin-stat-grid { grid-template-columns: 1fr; }
+        }
       `}</style>
     </div>
   )
@@ -638,7 +677,6 @@ function AdminTeams() {
                         {m.is_captain && <span className="badge badge-cyan" style={{ fontSize: '0.62rem', padding: '2px 8px' }}>КАПИТАН</span>}
                       </div>
                       <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Ник: {m.game_nickname}</div>
-                      <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Студ. билет: {m.student_id}</div>
                     </div>
                   ))}
                 </div>
@@ -738,7 +776,6 @@ function AdminNews() {
                   <option>Анонс</option>
                   <option>Официально</option>
                   <option>Организация</option>
-                  <option>Партнёры</option>
                   <option>Результаты</option>
                 </select>
               </div>
@@ -821,7 +858,7 @@ function AdminResults() {
         color: 'var(--text-muted)'
       }}>
         <TrendingUp size={48} style={{ color: 'var(--cyan)', margin: '0 auto 16px' }} />
-        <p style={{ fontSize: '1rem' }}>Управление результатами доступно с 15 мая 2026</p>
+        <p style={{ fontSize: '1rem' }}>Управление результатами доступно с 22 мая 2026</p>
         <p style={{ fontSize: '0.85rem', marginTop: 8 }}>Здесь вы сможете вводить результаты матчей в реальном времени</p>
       </div>
     </motion.div>
