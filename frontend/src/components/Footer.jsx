@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Gamepad2, MapPin, Mail, Phone, MessageCircle } from 'lucide-react'
+import { Gamepad2, MapPin, Mail, Phone, MessageCircle, Instagram } from 'lucide-react'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -79,6 +79,10 @@ export default function Footer() {
               <li>
                 <MessageCircle size={16} className="contact-icon" />
                 <a href="https://t.me/kabilzhanovv" target="_blank" rel="noopener noreferrer">Telegram: @kabilzhanovv</a>
+              </li>
+              <li>
+                <Instagram size={16} className="contact-icon" />
+                <a href="https://www.instagram.com/univer.mnu?utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram: @univer.mnu</a>
               </li>
             </ul>
           </div>

@@ -154,6 +154,9 @@ export default function FAQ() {
                 <a href="https://t.me/kabilzhanovv" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginBottom: 10 }}>
                   Telegram @kabilzhanovv
                 </a>
+                <a href="https://www.instagram.com/univer.mnu?utm_source=qr" target="_blank" rel="noopener noreferrer" className="btn btn-secondary faq-contact-link" style={{ width: '100%', justifyContent: 'center', marginBottom: 10 }}>
+                  Instagram @univer.mnu
+                </a>
                 <a href="https://wa.me/996755041207" target="_blank" rel="noopener noreferrer" className="btn btn-secondary faq-contact-link" style={{ width: '100%', justifyContent: 'center', marginBottom: 10 }}>
                   WhatsApp +996 755 041 207
                 </a>
