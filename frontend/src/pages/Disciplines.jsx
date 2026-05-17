@@ -51,8 +51,9 @@ const disciplines = [
     prize: 'TBD',
     prizeBreakdown: [
       { place: '1 место', amount: '🥇 Кубок + Медаль + Диплом + Специальная награда', color: 'gold' },
-      { place: '2 место', amount: '🥈 Медаль + Диплом', color: 'silver' },
-      { place: '3 место', amount: '🥉 Медаль + Диплом', color: 'bronze' },
+      { place: '2 место', amount: '🥈 Медаль + Диплом + Специальная награда', color: 'silver' },
+      { place: '3 место', amount: '🥉 Медаль + Диплом + Специальная награда', color: 'bronze' },
+      { place: '🎖 Лучший игрок', amount: 'Приз активному игроку турнира', color: 'gold' },
     ],
     teamSize: 4,
     format: 'Battle Royale (4 игрока в команде)',
@@ -63,11 +64,14 @@ const disciplines = [
       'Персонажи и питомцы — по выбору',
       'Все игроки используют личные аккаунты',
       'Запрещены модифицированные APK файлы',
+      '⚠️ Все игроки обязаны быть подписаны на @univer.mnu в Instagram — проверяется в день турнира',
     ],
     requirements: [
       'Аккаунт уровня не ниже 20',
       'Студент или выпускник 11 класса',
       'Наличие смартфона или планшета',
+      '🎧 Наушники — обязательны для каждого игрока',
+      'Подписка на Instagram @univer.mnu (обязательно)',
       'Согласие с правилами турнира',
     ],
     desc: 'Динамичный Fast-Paced Battle Royale с уникальными персонажами и способностями. Быстрые матчи, яркие эффекты и высокая скорость геймплея. Каждый матч длится 10 минут — нет времени на раздумья, только действие!',
@@ -194,7 +198,15 @@ export default function Disciplines() {
                     </li>
                   ))}
                 </ul>
-                <Link to="/register" className={`btn btn-${d.color === 'cyan' ? 'primary' : 'purple'}`} style={{ marginTop: '24px', justifyContent: 'center' }}>
+                <a
+                  href="https://www.instagram.com/univer.mnu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 16, padding: '10px 14px', background: 'linear-gradient(135deg, rgba(214,0,255,0.12), rgba(255,80,0,0.08))', border: '1px solid rgba(214,0,255,0.35)', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem', color: '#e879f9', fontWeight: 600, textDecoration: 'none' }}
+                >
+                  📸 Instagram: @univer.mnu — подпишись до турнира!
+                </a>
+                <Link to="/register" className={`btn btn-${d.color === 'cyan' ? 'primary' : 'purple'}`} style={{ marginTop: '12px', justifyContent: 'center' }}>
                   <Zap size={14} />
                   Зарегистрироваться
                 </Link>

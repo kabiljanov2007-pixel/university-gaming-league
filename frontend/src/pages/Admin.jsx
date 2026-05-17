@@ -481,8 +481,9 @@ function AdminDashboard() {
 function AdminTeams() {
   const [teams, setTeams] = useState([])
   const [loading, setLoading] = useState(true)
-  const [selectedTeam, setSelectedTeam] = useState(null)
-  const [detailsLoading, setDetailsLoading] = useState(false)
+  const [expandedId, setExpandedId] = useState(null)
+  const [expandedData, setExpandedData] = useState({})
+  const [loadingId, setLoadingId] = useState(null)
   const [statusFilter, setStatusFilter] = useState('all')
 
   useEffect(() => {
@@ -492,15 +493,19 @@ function AdminTeams() {
       .finally(() => setLoading(false))
   }, [])
 
-  const openTeamDetails = async (teamId) => {
-    setDetailsLoading(true)
+  const toggleTeamDetails = async (teamId) => {
+    if (expandedId === teamId) { setExpandedId(null); return }
+    setExpandedId(teamId)
+    if (expandedData[teamId]) return
+    setLoadingId(teamId)
     try {
       const res = await api.get(`/teams/admin/${teamId}`)
-      setSelectedTeam(res.data)
+      setExpandedData(prev => ({ ...prev, [teamId]: res.data }))
     } catch (err) {
       toast.error(err.response?.data?.message || 'Не удалось загрузить данные команды')
+      setExpandedId(null)
     } finally {
-      setDetailsLoading(false)
+      setLoadingId(null)
     }
   }
 
@@ -568,122 +573,100 @@ function AdminTeams() {
           По выбранному фильтру заявок нет
         </div>
       ) : (
-        <>
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Команда</th>
-                <th>Дисциплина</th>
-                <th>Университет</th>
-                <th>Капитан</th>
-                <th>Игроков</th>
-                <th>Отправлено</th>
-                <th>Статус</th>
-                <th>Действия</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTeams.map(t => (
-                <tr key={t.id}>
-                  <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{t.name}</td>
-                  <td>{t.discipline_name}</td>
-                  <td>{t.university}</td>
-                  <td>{t.captain_name}</td>
-                  <td style={{ textAlign: 'center' }}>{t.members_count}</td>
-                  <td>{fmtDateTime(t.created_at)}</td>
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Команда</th>
+              <th>Дисциплина</th>
+              <th>Университет</th>
+              <th>Капитан</th>
+              <th style={{ textAlign: 'center' }}>Игроков</th>
+              <th>Отправлено</th>
+              <th>Статус</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredTeams.map(t => (
+              <>
+                <tr key={t.id} style={{ background: expandedId === t.id ? 'rgba(0,212,255,0.05)' : undefined }}>
+                  <td style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.82rem' }}>{t.name}</td>
+                  <td style={{ fontSize: '0.82rem' }}>{t.discipline_name}</td>
+                  <td style={{ fontSize: '0.82rem', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.university}</td>
+                  <td style={{ fontSize: '0.82rem' }}>{t.captain_name}</td>
+                  <td style={{ textAlign: 'center', fontSize: '0.82rem' }}>{t.members_count}</td>
+                  <td style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{fmtDateTime(t.created_at)}</td>
                   <td>
-                    <span className={`badge ${t.status === 'approved' ? 'badge-cyan' : 'badge-purple'}`}>
+                    <span className={`badge ${t.status === 'approved' ? 'badge-cyan' : 'badge-purple'}`} style={{ fontSize: '0.62rem', padding: '3px 8px' }}>
                       {t.status === 'approved' ? 'Принята' : t.status === 'pending' ? 'Проверка' : 'Отклонена'}
                     </span>
                   </td>
                   <td>
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      <button className="action-btn" onClick={() => openTeamDetails(t.id)} title="Проверить команду">
-                        <Eye size={14} />
+                    <div style={{ display: 'flex', gap: 5 }}>
+                      <button
+                        className="action-btn"
+                        onClick={() => toggleTeamDetails(t.id)}
+                        title="Состав команды"
+                        style={{ background: expandedId === t.id ? 'var(--cyan-dim)' : undefined, borderColor: expandedId === t.id ? 'var(--border-cyan)' : undefined, color: expandedId === t.id ? 'var(--cyan)' : undefined }}
+                      >
+                        <Eye size={13} />
                       </button>
                       {t.status === 'pending' && (
                         <>
-                          <button className="action-btn success" onClick={() => updateStatus(t.id, 'approved')} title="Принять">
-                            <Check size={14} />
-                          </button>
-                          <button className="action-btn danger" onClick={() => updateStatus(t.id, 'rejected')} title="Отклонить">
-                            <X size={14} />
-                          </button>
+                          <button className="action-btn success" onClick={() => updateStatus(t.id, 'approved')} title="Принять"><Check size={13} /></button>
+                          <button className="action-btn danger" onClick={() => updateStatus(t.id, 'rejected')} title="Отклонить"><X size={13} /></button>
                         </>
                       )}
                       {t.status === 'approved' && (
-                        <button className="action-btn" onClick={() => updateStatus(t.id, 'pending')} title="Вернуть на проверку">
-                          <X size={14} />
-                        </button>
+                        <button className="action-btn" onClick={() => updateStatus(t.id, 'pending')} title="На проверку"><X size={13} /></button>
                       )}
                       {t.status === 'rejected' && (
-                        <button className="action-btn success" onClick={() => updateStatus(t.id, 'approved')} title="Принять">
-                          <Check size={14} />
-                        </button>
+                        <button className="action-btn success" onClick={() => updateStatus(t.id, 'approved')} title="Принять"><Check size={13} /></button>
                       )}
-                      <button className="action-btn danger" onClick={() => deleteTeam(t.id, t.name)} title="Удалить">
-                        <Trash2 size={14} />
-                      </button>
+                      <button className="action-btn danger" onClick={() => deleteTeam(t.id, t.name)} title="Удалить"><Trash2 size={13} /></button>
                     </div>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
 
-          <div style={{ marginTop: 16 }}>
-            {detailsLoading && (
-              <div className="admin-loading" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 20 }}>
-                <div className="loading-spinner" /><p>Загружаем данные команды...</p>
-              </div>
-            )}
-
-            {!detailsLoading && selectedTeam && (
-              <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-cyan)', borderRadius: 'var(--radius)', padding: 18 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 12, flexWrap: 'wrap' }}>
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-game)', fontSize: '0.92rem', color: 'var(--cyan)', letterSpacing: '0.06em' }}>ПРОВЕРКА КОМАНДЫ</div>
-                    <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1.05rem' }}>{selectedTeam.name}</div>
-                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{selectedTeam.discipline_name} · {selectedTeam.university}</div>
-                  </div>
-                  <button className="action-btn" onClick={() => setSelectedTeam(null)} title="Закрыть">
-                    <X size={14} />
-                  </button>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 12, marginBottom: 14 }}>
-                  <div style={{ border: '1px solid var(--border)', borderRadius: '10px', padding: 12, background: 'rgba(255,255,255,0.02)' }}>
-                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: 4 }}>Капитан</div>
-                    <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{selectedTeam.captain_name}</div>
-                  </div>
-                  <div style={{ border: '1px solid var(--border)', borderRadius: '10px', padding: 12, background: 'rgba(255,255,255,0.02)' }}>
-                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: 4 }}>Телефон</div>
-                    <div style={{ color: 'var(--text-primary)' }}>{selectedTeam.captain_phone || 'Не указан'}</div>
-                  </div>
-                  <div style={{ border: '1px solid var(--border)', borderRadius: '10px', padding: 12, background: 'rgba(255,255,255,0.02)' }}>
-                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: 4 }}>Telegram</div>
-                    <div style={{ color: 'var(--text-primary)' }}>{selectedTeam.captain_telegram || 'Не указан'}</div>
-                  </div>
-                </div>
-
-                <div style={{ fontFamily: 'var(--font-game)', fontSize: '0.78rem', color: 'var(--text-secondary)', letterSpacing: '0.08em', marginBottom: 8 }}>
-                  УЧАСТНИКИ КОМАНДЫ
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-                  {(selectedTeam.members || []).map((m, i) => (
-                    <div key={m.id || i} style={{ border: `1px solid ${m.is_captain ? 'var(--border-cyan)' : 'var(--border)'}`, borderRadius: '10px', padding: 12, background: m.is_captain ? 'rgba(0,255,255,0.08)' : 'rgba(255,255,255,0.02)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
-                        <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{m.name}</div>
-                        {m.is_captain && <span className="badge badge-cyan" style={{ fontSize: '0.62rem', padding: '2px 8px' }}>КАПИТАН</span>}
+                {expandedId === t.id && (
+                  <tr key={`${t.id}-detail`}>
+                    <td colSpan={8} style={{ padding: 0, background: 'var(--bg-secondary)' }}>
+                      <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border-cyan)', borderBottom: '1px solid var(--border-cyan)' }}>
+                        {loadingId === t.id ? (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', color: 'var(--text-muted)', fontSize: '0.82rem' }}>
+                            <div className="loading-spinner" style={{ width: 20, height: 20, borderWidth: 2 }} />
+                            Загружаем состав...
+                          </div>
+                        ) : expandedData[t.id] ? (
+                          <>
+                            <div style={{ display: 'flex', gap: 16, marginBottom: 10, flexWrap: 'wrap', fontSize: '0.8rem' }}>
+                              <span style={{ color: 'var(--text-muted)' }}>📞 <span style={{ color: 'var(--text-primary)' }}>{expandedData[t.id].captain_phone || '—'}</span></span>
+                              <span style={{ color: 'var(--text-muted)' }}>✉️ <span style={{ color: 'var(--text-primary)' }}>{expandedData[t.id].captain_telegram || '—'}</span></span>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                              {(expandedData[t.id].members || []).map((m, i) => (
+                                <div key={m.id || i} style={{ border: `1px solid ${m.is_captain ? 'var(--border-cyan)' : 'var(--border)'}`, borderRadius: 8, padding: '8px 10px', background: m.is_captain ? 'rgba(0,212,255,0.07)' : 'rgba(255,255,255,0.02)' }}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                                    <span style={{ fontSize: '0.7rem', color: m.is_captain ? 'var(--cyan)' : 'var(--text-muted)', fontFamily: 'var(--font-game)', letterSpacing: '0.06em' }}>
+                                      {m.is_captain ? '👑 КАПИТАН' : `ИГРОК ${i + 1}`}
+                                    </span>
+                                  </div>
+                                  <div style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--text-primary)', marginBottom: 2 }}>{m.name}</div>
+                                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Ник: {m.game_nickname}</div>
+                                  {m.student_id && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Билет: {m.student_id}</div>}
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        ) : null}
                       </div>
-                      <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Ник: {m.game_nickname}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </>
+                    </td>
+                  </tr>
+                )}
+              </>
+            ))}
+          </tbody>
+        </table>
       )}
     </motion.div>
   )
