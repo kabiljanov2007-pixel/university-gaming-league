@@ -93,7 +93,7 @@ export default function Admin() {
         }
 
         .admin-sidebar {
-          width: 240px;
+          width: 220px;
           flex-shrink: 0;
           background: var(--bg-secondary);
           border-right: 1px solid var(--border);
@@ -204,9 +204,9 @@ export default function Admin() {
         }
 
         .admin-main {
-          margin-left: 240px;
+          margin-left: 220px;
           flex: 1;
-          padding: 32px;
+          padding: 24px;
           min-height: 100vh;
         }
 
@@ -502,6 +502,11 @@ function AdminTeams() {
   const toggleTeamDetails = async (teamId) => {
     if (expandedId === teamId) { setExpandedId(null); return }
     setExpandedId(teamId)
+    // Keep selected row in view so the table doesn't "jump" away from visible names.
+    setTimeout(() => {
+      const row = document.querySelector(`[data-team-row="${teamId}"]`)
+      row?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }, 50)
     if (expandedData[teamId]) return
     setLoadingId(teamId)
     try {
@@ -596,7 +601,7 @@ function AdminTeams() {
           <tbody>
             {filteredTeams.map(t => (
               <Fragment key={t.id}>
-                <tr key={t.id} style={{ background: expandedId === t.id ? 'rgba(0,212,255,0.05)' : undefined }}>
+                <tr data-team-row={t.id} key={t.id} style={{ background: expandedId === t.id ? 'rgba(0,212,255,0.05)' : undefined }}>
                   <td style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.82rem' }}>{t.name}</td>
                   <td style={{ fontSize: '0.82rem' }}>{t.discipline_name}</td>
                   <td style={{ fontSize: '0.82rem', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.university}</td>
@@ -638,7 +643,7 @@ function AdminTeams() {
                 {expandedId === t.id && (
                   <tr>
                     <td colSpan={8} style={{ padding: 0, background: 'var(--bg-secondary)' }}>
-                      <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border-cyan)', borderBottom: '1px solid var(--border-cyan)' }}>
+                      <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border-cyan)', borderBottom: '1px solid var(--border-cyan)', maxHeight: 260, overflowY: 'auto' }}>
                         {loadingId === t.id ? (
                           <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', color: 'var(--text-muted)', fontSize: '0.82rem' }}>
                             <div className="loading-spinner" style={{ width: 20, height: 20, borderWidth: 2 }} />
@@ -650,7 +655,7 @@ function AdminTeams() {
                               <span style={{ color: 'var(--text-muted)' }}>📞 <span style={{ color: 'var(--text-primary)' }}>{expandedData[t.id].captain_phone || '—'}</span></span>
                               <span style={{ color: 'var(--text-muted)' }}>✉️ <span style={{ color: 'var(--text-primary)' }}>{expandedData[t.id].captain_telegram || '—'}</span></span>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 8 }}>
                               {(expandedData[t.id].members || []).map((m, i) => (
                                 <div key={m.id || i} style={{ border: `1px solid ${m.is_captain ? 'var(--border-cyan)' : 'var(--border)'}`, borderRadius: 8, padding: '8px 10px', background: m.is_captain ? 'rgba(0,212,255,0.07)' : 'rgba(255,255,255,0.02)' }}>
                                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
