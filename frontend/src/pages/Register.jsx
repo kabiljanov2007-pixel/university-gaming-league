@@ -561,11 +561,11 @@ function Step1({ register, errors }) {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Имя капитана *</label>
+          <label className="form-label">Имя и фамилия капитана *</label>
           <input
             className={`form-input ${errors.contactName ? 'error' : ''}`}
-            placeholder="Полное имя"
-            {...register('contactName', { required: 'Введите имя капитана' })}
+            placeholder="Например: Арзубек Осмонов"
+            {...register('contactName', { required: 'Введите имя и фамилию капитана' })}
           />
           {errors.contactName && <p className="form-error">{errors.contactName.message}</p>}
         </div>
@@ -614,7 +614,7 @@ function Step2({ register, errors, fields }) {
               <label className="form-label">Имя и фамилия *</label>
               <input
                 className={`form-input ${errors.members?.[i]?.name ? 'error' : ''}`}
-                placeholder="Реальное имя"
+                placeholder="Например: Азиз Камалов"
                 {...register(`members.${i}.name`, { required: 'Обязательное поле' })}
               />
               {errors.members?.[i]?.name && <p className="form-error">{errors.members[i].name.message}</p>}
