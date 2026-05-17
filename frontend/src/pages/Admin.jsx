@@ -93,7 +93,7 @@ export default function Admin() {
         }
 
         .admin-sidebar {
-          width: 220px;
+          width: 190px;
           flex-shrink: 0;
           background: var(--bg-secondary);
           border-right: 1px solid var(--border);
@@ -109,8 +109,8 @@ export default function Admin() {
         .admin-logo {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 24px 20px;
+          gap: 10px;
+          padding: 18px 14px;
           border-bottom: 1px solid var(--border);
         }
 
@@ -136,10 +136,10 @@ export default function Admin() {
         .admin-nav-item {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 10px 14px;
+          gap: 10px;
+          padding: 9px 11px;
           border-radius: var(--radius-sm);
-          font-size: 0.88rem;
+          font-size: 0.82rem;
           font-weight: 500;
           color: var(--text-secondary);
           transition: all var(--transition);
@@ -158,7 +158,7 @@ export default function Admin() {
         }
 
         .admin-user {
-          padding: 16px;
+          padding: 12px;
           border-top: 1px solid var(--border);
           display: flex;
           align-items: center;
@@ -204,9 +204,9 @@ export default function Admin() {
         }
 
         .admin-main {
-          margin-left: 220px;
+          margin-left: 190px;
           flex: 1;
-          padding: 24px;
+          padding: 18px;
           min-height: 100vh;
         }
 
@@ -269,9 +269,9 @@ export default function Admin() {
         }
 
         .admin-table th {
-          padding: 14px 16px;
+          padding: 10px 12px;
           text-align: left;
-          font-size: 0.72rem;
+          font-size: 0.68rem;
           color: var(--text-muted);
           letter-spacing: 0.08em;
           text-transform: uppercase;
@@ -280,8 +280,8 @@ export default function Admin() {
         }
 
         .admin-table td {
-          padding: 14px 16px;
-          font-size: 0.88rem;
+          padding: 10px 12px;
+          font-size: 0.8rem;
           color: var(--text-secondary);
           border-bottom: 1px solid rgba(255,255,255,0.04);
         }
