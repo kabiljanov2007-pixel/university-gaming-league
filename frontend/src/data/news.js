@@ -57,8 +57,6 @@ export const publicNews = [
     published: true,
     created_at: '2026-05-14T08:00:00.000Z',
   },
-]
-
   {
     id: 'headphones-required',
     title: '🎧 Наушники обязательны для каждого участника',
