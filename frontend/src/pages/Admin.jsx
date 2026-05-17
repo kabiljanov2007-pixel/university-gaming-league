@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -260,6 +260,12 @@ export default function Admin() {
           border-radius: var(--radius);
           overflow: hidden;
           border: 1px solid var(--border);
+        }
+
+        .admin-table-wrap {
+          overflow-x: auto;
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
         }
 
         .admin-table th {
@@ -573,22 +579,23 @@ function AdminTeams() {
           По выбранному фильтру заявок нет
         </div>
       ) : (
+        <div className="admin-table-wrap">
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Команда</th>
-              <th>Дисциплина</th>
-              <th>Университет</th>
-              <th>Капитан</th>
-              <th style={{ textAlign: 'center' }}>Игроков</th>
-              <th>Отправлено</th>
-              <th>Статус</th>
-              <th>Действия</th>
+              <th style={{ minWidth: 170 }}>Команда</th>
+              <th style={{ minWidth: 130 }}>Дисциплина</th>
+              <th style={{ minWidth: 150 }}>Университет</th>
+              <th style={{ minWidth: 150 }}>Капитан</th>
+              <th style={{ textAlign: 'center', minWidth: 85 }}>Игроков</th>
+              <th style={{ minWidth: 150 }}>Отправлено</th>
+              <th style={{ minWidth: 110 }}>Статус</th>
+              <th style={{ minWidth: 150 }}>Действия</th>
             </tr>
           </thead>
           <tbody>
             {filteredTeams.map(t => (
-              <>
+              <Fragment key={t.id}>
                 <tr key={t.id} style={{ background: expandedId === t.id ? 'rgba(0,212,255,0.05)' : undefined }}>
                   <td style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.82rem' }}>{t.name}</td>
                   <td style={{ fontSize: '0.82rem' }}>{t.discipline_name}</td>
@@ -629,7 +636,7 @@ function AdminTeams() {
                 </tr>
 
                 {expandedId === t.id && (
-                  <tr key={`${t.id}-detail`}>
+                  <tr>
                     <td colSpan={8} style={{ padding: 0, background: 'var(--bg-secondary)' }}>
                       <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border-cyan)', borderBottom: '1px solid var(--border-cyan)' }}>
                         {loadingId === t.id ? (
@@ -643,7 +650,7 @@ function AdminTeams() {
                               <span style={{ color: 'var(--text-muted)' }}>📞 <span style={{ color: 'var(--text-primary)' }}>{expandedData[t.id].captain_phone || '—'}</span></span>
                               <span style={{ color: 'var(--text-muted)' }}>✉️ <span style={{ color: 'var(--text-primary)' }}>{expandedData[t.id].captain_telegram || '—'}</span></span>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
                               {(expandedData[t.id].members || []).map((m, i) => (
                                 <div key={m.id || i} style={{ border: `1px solid ${m.is_captain ? 'var(--border-cyan)' : 'var(--border)'}`, borderRadius: 8, padding: '8px 10px', background: m.is_captain ? 'rgba(0,212,255,0.07)' : 'rgba(255,255,255,0.02)' }}>
                                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
@@ -653,7 +660,6 @@ function AdminTeams() {
                                   </div>
                                   <div style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--text-primary)', marginBottom: 2 }}>{m.name}</div>
                                   <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Ник: {m.game_nickname}</div>
-                                  {m.student_id && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Билет: {m.student_id}</div>}
                                 </div>
                               ))}
                             </div>
@@ -663,10 +669,11 @@ function AdminTeams() {
                     </td>
                   </tr>
                 )}
-              </>
+              </Fragment>
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </motion.div>
   )
