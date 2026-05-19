@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import Countdown from '../components/Countdown'
 import { publicNews } from '../data/news'
+import api from '../hooks/useApi'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -1039,7 +1040,19 @@ function AboutSection() {
 }
 
 function NewsPreview() {
-  const news = publicNews.slice(0, 3)
+  const [news, setNews] = useState(publicNews.slice(0, 3))
+
+  useEffect(() => {
+    let alive = true
+    api.get('/news?limit=3')
+      .then((res) => {
+        if (!alive) return
+        const items = res.data?.items || []
+        if (items.length > 0) setNews(items)
+      })
+      .catch(() => {})
+    return () => { alive = false }
+  }, [])
 
   return (
     <section className="section news-preview-section">

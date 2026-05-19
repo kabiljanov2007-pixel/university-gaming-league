@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Newspaper, ChevronRight, Calendar, Tag, Search } from 'lucide-react'
 import { publicNews } from '../data/news'
+import api from '../hooks/useApi'
 
 const tagColors = { 'Анонс': 'cyan', 'Официально': 'purple', 'Организация': 'purple', 'Партнёры': 'cyan' }
 
@@ -14,9 +15,30 @@ const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }
 const stagger = { visible: { transition: { staggerChildren: 0.08 } } }
 
 export default function News() {
-  const [news] = useState(publicNews)
+  const [news, setNews] = useState([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [activeTag, setActiveTag] = useState('all')
+
+  useEffect(() => {
+    let alive = true
+    api.get('/news')
+      .then((res) => {
+        if (!alive) return
+        const items = res.data?.items || []
+        if (items.length > 0) setNews(items)
+        else setNews(publicNews)
+      })
+      .catch(() => {
+        if (!alive) return
+        setNews(publicNews)
+      })
+      .finally(() => {
+        if (alive) setLoading(false)
+      })
+
+    return () => { alive = false }
+  }, [])
 
   const tags = ['all', ...new Set(news.map(n => n.tag))]
 
@@ -71,6 +93,12 @@ export default function News() {
             </div>
           </div>
 
+          {loading ? (
+            <div className="empty-state">
+              <div className="loading-spinner" />
+              <p>Загрузка новостей...</p>
+            </div>
+          ) : (
           <motion.div initial="hidden" animate="visible" variants={stagger}>
               {featured && (
                 <motion.div variants={fadeUp} style={{ marginBottom: 32 }}>
@@ -116,6 +144,7 @@ export default function News() {
                 </div>
               )}
           </motion.div>
+          )}
         </div>
       </section>
 

@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ChevronLeft, Calendar, Tag, Share2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { findPublicNews } from '../data/news'
+import api from '../hooks/useApi'
 
 const fmt = (iso) => new Date(iso).toLocaleDateString('ru-RU', {
   day: 'numeric', month: 'long', year: 'numeric',
@@ -24,12 +26,47 @@ const renderContent = (text) => {
 
 export default function NewsDetail() {
   const { id } = useParams()
-  const article = findPublicNews(id)
+  const [article, setArticle] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let alive = true
+    const fallback = findPublicNews(id)
+
+    // Static articles use string ids, admin/backend articles use numeric ids.
+    if (!/^\d+$/.test(String(id))) {
+      setArticle(fallback || null)
+      setLoading(false)
+      return () => { alive = false }
+    }
+
+    api.get(`/news/${id}`)
+      .then((res) => {
+        if (!alive) return
+        setArticle(res.data)
+      })
+      .catch(() => {
+        if (!alive) return
+        setArticle(fallback || null)
+      })
+      .finally(() => {
+        if (alive) setLoading(false)
+      })
+
+    return () => { alive = false }
+  }, [id])
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href)
     toast.success('Ссылка скопирована!')
   }
+
+  if (loading) return (
+    <div className="container" style={{ padding: '120px 24px', textAlign: 'center' }}>
+      <div style={{ width: 40, height: 40, border: '3px solid var(--border)', borderTopColor: 'var(--cyan)', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto' }} />
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  )
 
   if (!article) return (
     <div className="container" style={{ padding: '120px 24px', textAlign: 'center' }}>
