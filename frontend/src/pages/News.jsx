@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Newspaper, ChevronRight, Calendar, Tag, Search } from 'lucide-react'
-import { publicNews } from '../data/news'
+import { mergeNews, publicNews } from '../data/news'
 import api from '../hooks/useApi'
 
 const tagColors = { 'Анонс': 'cyan', 'Официально': 'purple', 'Организация': 'purple', 'Партнёры': 'cyan' }
@@ -26,8 +26,7 @@ export default function News() {
       .then((res) => {
         if (!alive) return
         const items = res.data?.items || []
-        if (items.length > 0) setNews(items)
-        else setNews(publicNews)
+        setNews(mergeNews(items, publicNews))
       })
       .catch(() => {
         if (!alive) return

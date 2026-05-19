@@ -102,3 +102,18 @@ export const publicNews = [
 export function findPublicNews(id) {
   return publicNews.find((item) => item.id === id)
 }
+
+export function mergeNews(primary = [], fallback = []) {
+  const merged = [...primary]
+  const seenTitles = new Set(primary.map((n) => (n.title || '').trim().toLowerCase()))
+
+  fallback.forEach((item) => {
+    const key = (item.title || '').trim().toLowerCase()
+    if (!seenTitles.has(key)) {
+      merged.push(item)
+      seenTitles.add(key)
+    }
+  })
+
+  return merged.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+}

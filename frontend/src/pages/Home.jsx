@@ -5,7 +5,7 @@ import {
   ChevronRight, Gamepad2, Target, Clock, Star
 } from 'lucide-react'
 import Countdown from '../components/Countdown'
-import { publicNews } from '../data/news'
+import { mergeNews, publicNews } from '../data/news'
 import api from '../hooks/useApi'
 
 const fadeUp = {
@@ -1048,7 +1048,7 @@ function NewsPreview() {
       .then((res) => {
         if (!alive) return
         const items = res.data?.items || []
-        if (items.length > 0) setNews(items)
+        setNews(mergeNews(items, publicNews).slice(0, 3))
       })
       .catch(() => {})
     return () => { alive = false }
