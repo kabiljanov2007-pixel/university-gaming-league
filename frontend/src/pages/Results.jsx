@@ -91,7 +91,7 @@ function UpcomingView() {
       <div className="upcoming-info-grid">
         {[
           { icon: <Users size={20} />, label: 'PUBG Mobile', value: '16 команд' },
-          { icon: <Users size={20} />, label: 'Free Fire', value: '16 команд' },
+          { icon: <Users size={20} />, label: 'Free Fire', value: '12 команд' },
           { icon: <Swords size={20} />, label: 'Формат', value: 'Групповой + ПО' },
           { icon: <Trophy size={20} />, label: 'Победитель', value: 'TBD — 22 мая' },
         ].map((item, i) => (
