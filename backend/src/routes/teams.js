@@ -87,11 +87,12 @@ router.post('/register',
     try {
       await client.query('BEGIN')
 
-      // Check for duplicate team name in same discipline
+      // Check for duplicate team name in same discipline (ignore rejected)
       const dupCheck = await client.query(`
         SELECT t.id FROM teams t
         JOIN disciplines d ON d.id = t.discipline_id
         WHERE LOWER(t.name) = LOWER($1) AND d.slug = $2
+          AND t.status IN ('pending', 'approved')
       `, [req.body.teamName, req.body.discipline])
 
       if (dupCheck.rows.length > 0) {
