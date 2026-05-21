@@ -565,104 +565,97 @@ function AdminTeams() {
         })
       )
 
-      const CYAN = '0099BB'
-      const DARK = '1E2A38'
+      const HEADER_BG = '7EC8D8'  // light cyan like in screenshot
+      const BORDER_COLOR = 'AAAAAA'
+      const border = { style: BorderStyle.SINGLE, size: 6, color: BORDER_COLOR }
+      const allBorders = { top: border, bottom: border, left: border, right: border }
 
-      const cellBorder = (color = 'CCCCCC') => ({
-        top: { style: BorderStyle.SINGLE, size: 4, color },
-        bottom: { style: BorderStyle.SINGLE, size: 4, color },
-        left: { style: BorderStyle.SINGLE, size: 4, color },
-        right: { style: BorderStyle.SINGLE, size: 4, color },
-      })
-
-      const headerCell = (text, w) => new TableCell({
-        width: w ? { size: w, type: WidthType.PERCENTAGE } : undefined,
-        borders: cellBorder(CYAN),
-        shading: { type: ShadingType.SOLID, color: CYAN },
+      const hCell = (text, w) => new TableCell({
+        width: { size: w, type: WidthType.PERCENTAGE },
+        borders: allBorders,
+        shading: { type: ShadingType.SOLID, color: HEADER_BG },
+        verticalAlign: 'center',
         children: [new Paragraph({
           alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text, bold: true, color: 'FFFFFF', size: 20 })],
+          spacing: { before: 60, after: 60 },
+          children: [new TextRun({ text, bold: true, size: 20, color: '111111' })],
         })],
       })
 
-      const bodyCell = (text, bold = false, color = '222222', w) => new TableCell({
-        width: w ? { size: w, type: WidthType.PERCENTAGE } : undefined,
-        borders: cellBorder('DDDDDD'),
+      const bCell = (text, w, opts = {}) => new TableCell({
+        width: { size: w, type: WidthType.PERCENTAGE },
+        borders: allBorders,
+        verticalAlign: 'center',
         children: [new Paragraph({
-          children: [new TextRun({ text: String(text || '—'), bold, size: 20, color })],
+          alignment: opts.center ? AlignmentType.CENTER : AlignmentType.LEFT,
+          spacing: { before: 60, after: 60 },
+          children: [new TextRun({ text: String(text || ''), size: 19, color: '111111', bold: opts.bold || false })],
         })],
       })
 
-      const children = []
-
-      // Document title
-      children.push(new Paragraph({
-        heading: HeadingLevel.HEADING_1,
-        spacing: { after: 80 },
-        children: [new TextRun({ text: 'University Gaming League 2026', bold: true, size: 40, color: CYAN })],
-      }))
-      children.push(new Paragraph({
-        spacing: { after: 60 },
-        children: [new TextRun({ text: `Дисциплина: ${discLabel}  •  Принятые команды: ${detailed.length}`, bold: true, size: 24, color: DARK })],
-      }))
-      children.push(new Paragraph({
-        spacing: { after: 400 },
-        children: [new TextRun({ text: `Сформировано: ${new Date().toLocaleString('ru-RU')}`, size: 18, color: '999999', italics: true })],
-      }))
-
-      detailed.forEach((team, idx) => {
-        // Team name as heading
-        children.push(new Paragraph({
-          heading: HeadingLevel.HEADING_2,
-          spacing: { before: 320, after: 120 },
-          children: [new TextRun({ text: `${idx + 1}. ${team.name}`, bold: true, size: 30, color: DARK })],
-        }))
-
-        // University + Captain info line
-        children.push(new Paragraph({
-          spacing: { after: 60 },
-          children: [
-            new TextRun({ text: 'Учебное заведение: ', bold: true, size: 20, color: '555555' }),
-            new TextRun({ text: team.university || '—', size: 20 }),
-          ],
-        }))
-        children.push(new Paragraph({
-          spacing: { after: 160 },
-          children: [
-            new TextRun({ text: 'Капитан: ', bold: true, size: 20, color: '555555' }),
-            new TextRun({ text: team.captain_name || '—', size: 20 }),
-          ],
-        }))
-
-        // Members table — роль / имя / ник
-        const members = team.members || []
-        children.push(new Table({
-          width: { size: 100, type: WidthType.PERCENTAGE },
-          rows: [
-            new TableRow({
-              tableHeader: true,
-              children: [
-                headerCell('Роль', 18),
-                headerCell('Имя и фамилия', 50),
-                headerCell('Игровой ник', 32),
-              ],
-            }),
-            ...members.map((m, i) => new TableRow({
-              children: [
-                bodyCell(m.is_captain ? 'Капитан' : `Игрок ${i + 1}`, m.is_captain, m.is_captain ? CYAN : '333333', 18),
-                bodyCell(m.name, m.is_captain, '111111', 50),
-                bodyCell(m.game_nickname, false, '444444', 32),
-              ],
-            })),
-          ],
-        }))
-
-        children.push(new Paragraph({ spacing: { after: 160 } }))
+      // Build table rows
+      const headerRow = new TableRow({
+        tableHeader: true,
+        children: [
+          hCell('№', 4),
+          hCell('Название команды', 16),
+          hCell('Капитан команды', 18),
+          hCell('Участники', 32),
+          hCell('ВУЗ / школа', 18),
+          hCell('Место', 6),
+          hCell('Подпись', 6),
+        ],
       })
+
+      const dataRows = detailed.map((team, idx) => {
+        const members = team.members || []
+        const captain = members.find(m => m.is_captain)
+        const others = members.filter(m => !m.is_captain)
+        const participantsText = others.map(m => m.name).join('; ')
+
+        return new TableRow({
+          children: [
+            bCell(idx + 1, 4, { center: true }),
+            bCell(team.name, 16, { bold: true }),
+            bCell(captain ? captain.name : team.captain_name, 18),
+            bCell(participantsText, 32),
+            bCell(team.university, 18),
+            bCell('', 6),
+            bCell('', 6),
+          ],
+        })
+      })
+
+      const children = [
+        // Title
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { before: 0, after: 120 },
+          children: [new TextRun({ text: `Список участников турнира ${discLabel}`, bold: true, size: 32, color: '111111' })],
+        }),
+        // Subtitle note
+        new Paragraph({
+          spacing: { after: 200 },
+          children: [new TextRun({ text: 'Колонки «Место» и «Подпись» оставлены пустыми для заполнения.', size: 18, color: '666666', italics: true })],
+        }),
+        // Main table
+        new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          rows: [headerRow, ...dataRows],
+        }),
+      ]
 
       const doc = new Document({
-        sections: [{ properties: {}, children }],
-        styles: { default: { document: { run: { font: 'Calibri' } } } },
+        sections: [{
+          properties: {
+            page: {
+              size: { orientation: 'landscape' },
+              margin: { top: 720, bottom: 720, left: 720, right: 720 },
+            },
+          },
+          children,
+        }],
+        styles: { default: { document: { run: { font: 'Calibri', size: 20 } } } },
       })
 
       const blob = await Packer.toBlob(doc)
