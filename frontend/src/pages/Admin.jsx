@@ -545,31 +545,38 @@ function AdminTeams() {
 
   const filteredTeams = teams.filter((t) => statusFilter === 'all' ? true : t.status === statusFilter)
 
-  const downloadWord = async () => {
-    toast('Генерируем Word...', { icon: '⏳' })
+  const downloadWord = async (disciplineSlug) => {
+    const discLabel = disciplineSlug === 'pubg' ? 'PUBG Mobile' : 'Free Fire'
+    toast(`Генерируем Word — ${discLabel}...`, { icon: '⏳' })
     try {
+      const approvedInDisc = teams.filter(
+        (t) => t.status === 'approved' && t.discipline_slug === disciplineSlug
+      )
+      if (approvedInDisc.length === 0) {
+        toast.error(`Нет принятых команд по ${discLabel}`)
+        return
+      }
+
       const detailed = await Promise.all(
-        filteredTeams.map(async (t) => {
+        approvedInDisc.map(async (t) => {
           if (expandedData[t.id]) return { ...t, ...expandedData[t.id] }
           const res = await api.get(`/teams/admin/${t.id}`)
           return { ...t, ...res.data }
         })
       )
 
-      const statusLabel = { approved: 'Принята', pending: 'На проверке', rejected: 'Отклонена' }
-      const filterLabel = statusFilter === 'all' ? 'Все команды' : statusFilter === 'approved' ? 'Принятые команды' : statusFilter === 'pending' ? 'На проверке' : 'Отклонённые'
-
       const CYAN = '0099BB'
-      const DARK = '1A1A2E'
+      const DARK = '1E2A38'
 
-      const cellBorder = (color = '999999') => ({
+      const cellBorder = (color = 'CCCCCC') => ({
         top: { style: BorderStyle.SINGLE, size: 4, color },
         bottom: { style: BorderStyle.SINGLE, size: 4, color },
         left: { style: BorderStyle.SINGLE, size: 4, color },
         right: { style: BorderStyle.SINGLE, size: 4, color },
       })
 
-      const headerCell = (text) => new TableCell({
+      const headerCell = (text, w) => new TableCell({
+        width: w ? { size: w, type: WidthType.PERCENTAGE } : undefined,
         borders: cellBorder(CYAN),
         shading: { type: ShadingType.SOLID, color: CYAN },
         children: [new Paragraph({
@@ -578,100 +585,89 @@ function AdminTeams() {
         })],
       })
 
-      const bodyCell = (text, bold = false, color = '222222') => new TableCell({
-        borders: cellBorder('CCCCCC'),
+      const bodyCell = (text, bold = false, color = '222222', w) => new TableCell({
+        width: w ? { size: w, type: WidthType.PERCENTAGE } : undefined,
+        borders: cellBorder('DDDDDD'),
         children: [new Paragraph({
           children: [new TextRun({ text: String(text || '—'), bold, size: 20, color })],
         })],
       })
 
-      const infoLine = (label, value) => new Paragraph({
-        spacing: { after: 40 },
-        children: [
-          new TextRun({ text: `${label}: `, bold: true, size: 20, color: '555555' }),
-          new TextRun({ text: String(value || '—'), size: 20, color: '111111' }),
-        ],
-      })
+      const children = []
 
-      const sections = []
-
-      // Title
-      sections.push(new Paragraph({
+      // Document title
+      children.push(new Paragraph({
         heading: HeadingLevel.HEADING_1,
-        spacing: { after: 100 },
-        children: [new TextRun({ text: 'University Gaming League 2026', bold: true, size: 36, color: CYAN })],
+        spacing: { after: 80 },
+        children: [new TextRun({ text: 'University Gaming League 2026', bold: true, size: 40, color: CYAN })],
       }))
-
-      sections.push(new Paragraph({
+      children.push(new Paragraph({
         spacing: { after: 60 },
-        children: [new TextRun({ text: `${filterLabel}  •  Команд: ${detailed.length}`, size: 22, color: '444444' })],
+        children: [new TextRun({ text: `Дисциплина: ${discLabel}  •  Принятые команды: ${detailed.length}`, bold: true, size: 24, color: DARK })],
       }))
-
-      sections.push(new Paragraph({
-        spacing: { after: 300 },
-        children: [new TextRun({ text: `Сгенерировано: ${new Date().toLocaleString('ru-RU')}`, size: 18, color: '888888', italics: true })],
+      children.push(new Paragraph({
+        spacing: { after: 400 },
+        children: [new TextRun({ text: `Сформировано: ${new Date().toLocaleString('ru-RU')}`, size: 18, color: '999999', italics: true })],
       }))
 
       detailed.forEach((team, idx) => {
-        // Team heading
-        sections.push(new Paragraph({
+        // Team name as heading
+        children.push(new Paragraph({
           heading: HeadingLevel.HEADING_2,
-          spacing: { before: 300, after: 100 },
-          children: [new TextRun({ text: `${idx + 1}. ${team.name}`, bold: true, size: 28, color: DARK })],
+          spacing: { before: 320, after: 120 },
+          children: [new TextRun({ text: `${idx + 1}. ${team.name}`, bold: true, size: 30, color: DARK })],
         }))
 
-        sections.push(infoLine('Дисциплина', team.discipline_name))
-        sections.push(infoLine('Университет / Школа', team.university))
-        sections.push(infoLine('Статус', statusLabel[team.status] || team.status))
-        sections.push(infoLine('Капитан', team.captain_name))
-        sections.push(infoLine('Телефон', team.captain_phone))
-        sections.push(infoLine('Telegram', team.captain_telegram))
+        // University + Captain info line
+        children.push(new Paragraph({
+          spacing: { after: 60 },
+          children: [
+            new TextRun({ text: 'Учебное заведение: ', bold: true, size: 20, color: '555555' }),
+            new TextRun({ text: team.university || '—', size: 20 }),
+          ],
+        }))
+        children.push(new Paragraph({
+          spacing: { after: 160 },
+          children: [
+            new TextRun({ text: 'Капитан: ', bold: true, size: 20, color: '555555' }),
+            new TextRun({ text: team.captain_name || '—', size: 20 }),
+          ],
+        }))
 
-        sections.push(new Paragraph({ spacing: { after: 80 } }))
-
-        // Members table
+        // Members table — роль / имя / ник
         const members = team.members || []
-        sections.push(new Table({
+        children.push(new Table({
           width: { size: 100, type: WidthType.PERCENTAGE },
           rows: [
             new TableRow({
               tableHeader: true,
               children: [
-                headerCell('№'),
-                headerCell('Роль'),
-                headerCell('Имя и фамилия'),
-                headerCell('Игровой ник'),
+                headerCell('Роль', 18),
+                headerCell('Имя и фамилия', 50),
+                headerCell('Игровой ник', 32),
               ],
             }),
             ...members.map((m, i) => new TableRow({
               children: [
-                bodyCell(i + 1, false, '888888'),
-                bodyCell(m.is_captain ? 'Капитан' : `Игрок ${i + 1}`, m.is_captain, m.is_captain ? CYAN : '222222'),
-                bodyCell(m.name, m.is_captain),
-                bodyCell(m.game_nickname),
+                bodyCell(m.is_captain ? 'Капитан' : `Игрок ${i + 1}`, m.is_captain, m.is_captain ? CYAN : '333333', 18),
+                bodyCell(m.name, m.is_captain, '111111', 50),
+                bodyCell(m.game_nickname, false, '444444', 32),
               ],
             })),
           ],
         }))
 
-        sections.push(new Paragraph({ spacing: { after: 200 } }))
+        children.push(new Paragraph({ spacing: { after: 160 } }))
       })
 
       const doc = new Document({
-        sections: [{ properties: {}, children: sections }],
-        styles: {
-          default: {
-            document: {
-              run: { font: 'Calibri', size: 22 },
-            },
-          },
-        },
+        sections: [{ properties: {}, children }],
+        styles: { default: { document: { run: { font: 'Calibri' } } } },
       })
 
       const blob = await Packer.toBlob(doc)
-      const fileName = `UGL2026_${filterLabel.replace(/ /g, '_')}_${new Date().toISOString().slice(0, 10)}.docx`
-      saveAs(blob, fileName)
-      toast.success('Word файл скачан!')
+      saveAs(blob, `UGL2026_${discLabel.replace(' ', '_')}_${new Date().toISOString().slice(0, 10)}.docx`)
+      toast.success(`${discLabel} — Word скачан!`)
     } catch (err) {
       console.error(err)
       toast.error('Ошибка при генерации документа')
@@ -710,15 +706,26 @@ function AdminTeams() {
         >
           Отклонённые ({teams.filter((t) => t.status === 'rejected').length})
         </button>
-        <button
-          className="btn btn-secondary"
-          style={{ padding: '8px 14px', fontSize: '0.72rem', marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, borderColor: 'var(--border-cyan)', color: 'var(--cyan)' }}
-          onClick={downloadWord}
-          disabled={filteredTeams.length === 0}
-          title="Скачать текущий список команд в Word (.docx)"
-        >
-          <Download size={13} /> Скачать Word ({filteredTeams.length})
-        </button>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+          <button
+            className="btn btn-secondary"
+            style={{ padding: '8px 14px', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: 6, borderColor: 'var(--border-cyan)', color: 'var(--cyan)' }}
+            onClick={() => downloadWord('pubg')}
+            disabled={!teams.some(t => t.status === 'approved' && t.discipline_slug === 'pubg')}
+            title="Скачать принятые команды PUBG Mobile в Word"
+          >
+            <Download size={13} /> PUBG Mobile
+          </button>
+          <button
+            className="btn btn-secondary"
+            style={{ padding: '8px 14px', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: 6, borderColor: '#ff6b35', color: '#ff8c5a' }}
+            onClick={() => downloadWord('freefire')}
+            disabled={!teams.some(t => t.status === 'approved' && t.discipline_slug === 'freefire')}
+            title="Скачать принятые команды Free Fire в Word"
+          >
+            <Download size={13} /> Free Fire
+          </button>
+        </div>
       </div>
 
       {loading ? (
