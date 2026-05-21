@@ -4,11 +4,13 @@ import { motion } from 'framer-motion'
 import {
   LayoutDashboard, Users, Newspaper, Trophy,
   LogOut, Gamepad2, Check, X, Eye, Trash2,
-  ChevronRight, TrendingUp, Clock, Plus
+  ChevronRight, TrendingUp, Clock, Plus, Download
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import toast from 'react-hot-toast'
 import api from '../hooks/useApi'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 const navItems = [
   { to: '/admin', icon: <LayoutDashboard size={18} />, label: 'Дашборд' },
@@ -543,6 +545,76 @@ function AdminTeams() {
 
   const filteredTeams = teams.filter((t) => statusFilter === 'all' ? true : t.status === statusFilter)
 
+  const downloadPDF = async () => {
+    toast('Генерируем PDF...', { icon: '⏳' })
+    try {
+      // Fetch full details for all filtered teams in parallel
+      const detailed = await Promise.all(
+        filteredTeams.map(async (t) => {
+          if (expandedData[t.id]) return { ...t, members: expandedData[t.id].members, captain_phone: expandedData[t.id].captain_phone, captain_telegram: expandedData[t.id].captain_telegram }
+          const res = await api.get(`/teams/admin/${t.id}`)
+          return { ...t, members: res.data.members, captain_phone: res.data.captain_phone, captain_telegram: res.data.captain_telegram }
+        })
+      )
+
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
+      const statusLabel = { approved: 'Принята', pending: 'Проверка', rejected: 'Отклонена' }
+      const filterLabel = statusFilter === 'all' ? 'Все команды' : statusFilter === 'approved' ? 'Принятые команды' : statusFilter === 'pending' ? 'На проверке' : 'Отклонённые'
+
+      // Header
+      doc.setFontSize(16)
+      doc.setFont('helvetica', 'bold')
+      doc.text('University Gaming League 2026', 14, 16)
+      doc.setFontSize(10)
+      doc.setFont('helvetica', 'normal')
+      doc.text(`${filterLabel} — ${detailed.length} команд(ы)`, 14, 23)
+      doc.text(`Сгенерировано: ${new Date().toLocaleString('ru-RU')}`, 14, 29)
+
+      let yOffset = 36
+
+      detailed.forEach((team, idx) => {
+        if (yOffset > 170) { doc.addPage(); yOffset = 16 }
+
+        // Team header row
+        doc.setFontSize(11)
+        doc.setFont('helvetica', 'bold')
+        doc.text(`${idx + 1}. ${team.name}`, 14, yOffset)
+        doc.setFontSize(9)
+        doc.setFont('helvetica', 'normal')
+        doc.text(`Дисциплина: ${team.discipline_name || '—'}   Университет: ${team.university || '—'}   Статус: ${statusLabel[team.status] || team.status}`, 14, yOffset + 5)
+        doc.text(`Капитан: ${team.captain_name || '—'}   Телефон: ${team.captain_phone || '—'}   Telegram: ${team.captain_telegram || '—'}`, 14, yOffset + 10)
+        yOffset += 15
+
+        // Members table
+        const rows = (team.members || []).map((m, i) => [
+          m.is_captain ? 'Капитан' : `Игрок ${i + 1}`,
+          m.name || '—',
+          m.game_nickname || '—',
+        ])
+
+        autoTable(doc, {
+          startY: yOffset,
+          head: [['Роль', 'Имя и фамилия', 'Игровой ник']],
+          body: rows,
+          theme: 'grid',
+          headStyles: { fillColor: [0, 180, 216], textColor: 255, fontStyle: 'bold', fontSize: 8 },
+          bodyStyles: { fontSize: 8 },
+          columnStyles: { 0: { cellWidth: 25 }, 1: { cellWidth: 80 }, 2: { cellWidth: 80 } },
+          margin: { left: 14 },
+        })
+
+        yOffset = doc.lastAutoTable.finalY + 10
+      })
+
+      const fileName = `UGL2026_${filterLabel.replace(/ /g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`
+      doc.save(fileName)
+      toast.success('PDF скачан!')
+    } catch (err) {
+      console.error(err)
+      toast.error('Ошибка при генерации PDF')
+    }
+  }
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <h1 className="admin-page-title">Управление командами</h1>
@@ -574,6 +646,15 @@ function AdminTeams() {
           onClick={() => setStatusFilter('rejected')}
         >
           Отклонённые ({teams.filter((t) => t.status === 'rejected').length})
+        </button>
+        <button
+          className="btn btn-secondary"
+          style={{ padding: '8px 14px', fontSize: '0.72rem', marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, borderColor: 'var(--border-cyan)', color: 'var(--cyan)' }}
+          onClick={downloadPDF}
+          disabled={filteredTeams.length === 0}
+          title="Скачать текущий список команд в PDF"
+        >
+          <Download size={13} /> Скачать PDF ({filteredTeams.length})
         </button>
       </div>
 
