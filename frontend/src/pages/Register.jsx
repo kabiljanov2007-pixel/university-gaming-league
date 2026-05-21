@@ -13,7 +13,31 @@ const fadeSlide = {
   exit: { opacity: 0, x: -30 },
 }
 
+const REGISTRATION_CLOSED = true
+
 export default function Register() {
+  if (REGISTRATION_CLOSED) {
+    return (
+      <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
+        <div style={{ textAlign: 'center', maxWidth: 520 }}>
+          <div style={{ fontSize: '4rem', marginBottom: '24px' }}>🔒</div>
+          <h1 style={{ fontFamily: 'var(--font-game)', fontSize: '1.8rem', color: 'var(--cyan)', letterSpacing: '0.08em', marginBottom: '16px' }}>
+            РЕГИСТРАЦИЯ ЗАКРЫТА
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, marginBottom: '12px' }}>
+            Регистрация команд завершена. Приём заявок проходил с <strong style={{ color: 'var(--text-primary)' }}>14 по 20 мая 2026 года</strong>.
+          </p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '32px' }}>
+            Турнир состоится <strong style={{ color: 'var(--cyan)' }}>22 мая 2026 года</strong> в Университете им. К.Ш. Токтоматова.
+          </p>
+          <a href="/teams" style={{ display: 'inline-block', padding: '12px 32px', background: 'var(--cyan)', color: '#000', fontFamily: 'var(--font-game)', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.1em', borderRadius: 'var(--radius-sm)', textDecoration: 'none' }}>
+            СМОТРЕТЬ КОМАНДЫ
+          </a>
+        </div>
+      </div>
+    )
+  }
+
   const [step, setStep] = useState(0)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
