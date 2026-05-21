@@ -9,8 +9,8 @@ import {
 import { useAuth } from '../contexts/AuthContext'
 import toast from 'react-hot-toast'
 import api from '../hooks/useApi'
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import { Document, Packer, Paragraph, Table, TableRow, TableCell, TextRun, HeadingLevel, AlignmentType, WidthType, BorderStyle, ShadingType } from 'docx'
+import { saveAs } from 'file-saver'
 
 const navItems = [
   { to: '/admin', icon: <LayoutDashboard size={18} />, label: 'Дашборд' },
@@ -545,73 +545,136 @@ function AdminTeams() {
 
   const filteredTeams = teams.filter((t) => statusFilter === 'all' ? true : t.status === statusFilter)
 
-  const downloadPDF = async () => {
-    toast('Генерируем PDF...', { icon: '⏳' })
+  const downloadWord = async () => {
+    toast('Генерируем Word...', { icon: '⏳' })
     try {
-      // Fetch full details for all filtered teams in parallel
       const detailed = await Promise.all(
         filteredTeams.map(async (t) => {
-          if (expandedData[t.id]) return { ...t, members: expandedData[t.id].members, captain_phone: expandedData[t.id].captain_phone, captain_telegram: expandedData[t.id].captain_telegram }
+          if (expandedData[t.id]) return { ...t, ...expandedData[t.id] }
           const res = await api.get(`/teams/admin/${t.id}`)
-          return { ...t, members: res.data.members, captain_phone: res.data.captain_phone, captain_telegram: res.data.captain_telegram }
+          return { ...t, ...res.data }
         })
       )
 
-      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
-      const statusLabel = { approved: 'Принята', pending: 'Проверка', rejected: 'Отклонена' }
+      const statusLabel = { approved: 'Принята', pending: 'На проверке', rejected: 'Отклонена' }
       const filterLabel = statusFilter === 'all' ? 'Все команды' : statusFilter === 'approved' ? 'Принятые команды' : statusFilter === 'pending' ? 'На проверке' : 'Отклонённые'
 
-      // Header
-      doc.setFontSize(16)
-      doc.setFont('helvetica', 'bold')
-      doc.text('University Gaming League 2026', 14, 16)
-      doc.setFontSize(10)
-      doc.setFont('helvetica', 'normal')
-      doc.text(`${filterLabel} — ${detailed.length} команд(ы)`, 14, 23)
-      doc.text(`Сгенерировано: ${new Date().toLocaleString('ru-RU')}`, 14, 29)
+      const CYAN = '0099BB'
+      const DARK = '1A1A2E'
 
-      let yOffset = 36
-
-      detailed.forEach((team, idx) => {
-        if (yOffset > 170) { doc.addPage(); yOffset = 16 }
-
-        // Team header row
-        doc.setFontSize(11)
-        doc.setFont('helvetica', 'bold')
-        doc.text(`${idx + 1}. ${team.name}`, 14, yOffset)
-        doc.setFontSize(9)
-        doc.setFont('helvetica', 'normal')
-        doc.text(`Дисциплина: ${team.discipline_name || '—'}   Университет: ${team.university || '—'}   Статус: ${statusLabel[team.status] || team.status}`, 14, yOffset + 5)
-        doc.text(`Капитан: ${team.captain_name || '—'}   Телефон: ${team.captain_phone || '—'}   Telegram: ${team.captain_telegram || '—'}`, 14, yOffset + 10)
-        yOffset += 15
-
-        // Members table
-        const rows = (team.members || []).map((m, i) => [
-          m.is_captain ? 'Капитан' : `Игрок ${i + 1}`,
-          m.name || '—',
-          m.game_nickname || '—',
-        ])
-
-        autoTable(doc, {
-          startY: yOffset,
-          head: [['Роль', 'Имя и фамилия', 'Игровой ник']],
-          body: rows,
-          theme: 'grid',
-          headStyles: { fillColor: [0, 180, 216], textColor: 255, fontStyle: 'bold', fontSize: 8 },
-          bodyStyles: { fontSize: 8 },
-          columnStyles: { 0: { cellWidth: 25 }, 1: { cellWidth: 80 }, 2: { cellWidth: 80 } },
-          margin: { left: 14 },
-        })
-
-        yOffset = doc.lastAutoTable.finalY + 10
+      const cellBorder = (color = '999999') => ({
+        top: { style: BorderStyle.SINGLE, size: 4, color },
+        bottom: { style: BorderStyle.SINGLE, size: 4, color },
+        left: { style: BorderStyle.SINGLE, size: 4, color },
+        right: { style: BorderStyle.SINGLE, size: 4, color },
       })
 
-      const fileName = `UGL2026_${filterLabel.replace(/ /g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`
-      doc.save(fileName)
-      toast.success('PDF скачан!')
+      const headerCell = (text) => new TableCell({
+        borders: cellBorder(CYAN),
+        shading: { type: ShadingType.SOLID, color: CYAN },
+        children: [new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [new TextRun({ text, bold: true, color: 'FFFFFF', size: 20 })],
+        })],
+      })
+
+      const bodyCell = (text, bold = false, color = '222222') => new TableCell({
+        borders: cellBorder('CCCCCC'),
+        children: [new Paragraph({
+          children: [new TextRun({ text: String(text || '—'), bold, size: 20, color })],
+        })],
+      })
+
+      const infoLine = (label, value) => new Paragraph({
+        spacing: { after: 40 },
+        children: [
+          new TextRun({ text: `${label}: `, bold: true, size: 20, color: '555555' }),
+          new TextRun({ text: String(value || '—'), size: 20, color: '111111' }),
+        ],
+      })
+
+      const sections = []
+
+      // Title
+      sections.push(new Paragraph({
+        heading: HeadingLevel.HEADING_1,
+        spacing: { after: 100 },
+        children: [new TextRun({ text: 'University Gaming League 2026', bold: true, size: 36, color: CYAN })],
+      }))
+
+      sections.push(new Paragraph({
+        spacing: { after: 60 },
+        children: [new TextRun({ text: `${filterLabel}  •  Команд: ${detailed.length}`, size: 22, color: '444444' })],
+      }))
+
+      sections.push(new Paragraph({
+        spacing: { after: 300 },
+        children: [new TextRun({ text: `Сгенерировано: ${new Date().toLocaleString('ru-RU')}`, size: 18, color: '888888', italics: true })],
+      }))
+
+      detailed.forEach((team, idx) => {
+        // Team heading
+        sections.push(new Paragraph({
+          heading: HeadingLevel.HEADING_2,
+          spacing: { before: 300, after: 100 },
+          children: [new TextRun({ text: `${idx + 1}. ${team.name}`, bold: true, size: 28, color: DARK })],
+        }))
+
+        sections.push(infoLine('Дисциплина', team.discipline_name))
+        sections.push(infoLine('Университет / Школа', team.university))
+        sections.push(infoLine('Статус', statusLabel[team.status] || team.status))
+        sections.push(infoLine('Капитан', team.captain_name))
+        sections.push(infoLine('Телефон', team.captain_phone))
+        sections.push(infoLine('Telegram', team.captain_telegram))
+
+        sections.push(new Paragraph({ spacing: { after: 80 } }))
+
+        // Members table
+        const members = team.members || []
+        sections.push(new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          rows: [
+            new TableRow({
+              tableHeader: true,
+              children: [
+                headerCell('№'),
+                headerCell('Роль'),
+                headerCell('Имя и фамилия'),
+                headerCell('Игровой ник'),
+              ],
+            }),
+            ...members.map((m, i) => new TableRow({
+              children: [
+                bodyCell(i + 1, false, '888888'),
+                bodyCell(m.is_captain ? 'Капитан' : `Игрок ${i + 1}`, m.is_captain, m.is_captain ? CYAN : '222222'),
+                bodyCell(m.name, m.is_captain),
+                bodyCell(m.game_nickname),
+              ],
+            })),
+          ],
+        }))
+
+        sections.push(new Paragraph({ spacing: { after: 200 } }))
+      })
+
+      const doc = new Document({
+        sections: [{ properties: {}, children: sections }],
+        styles: {
+          default: {
+            document: {
+              run: { font: 'Calibri', size: 22 },
+            },
+          },
+        },
+      })
+
+      const blob = await Packer.toBlob(doc)
+      const fileName = `UGL2026_${filterLabel.replace(/ /g, '_')}_${new Date().toISOString().slice(0, 10)}.docx`
+      saveAs(blob, fileName)
+      toast.success('Word файл скачан!')
     } catch (err) {
       console.error(err)
-      toast.error('Ошибка при генерации PDF')
+      toast.error('Ошибка при генерации документа')
     }
   }
 
@@ -650,11 +713,11 @@ function AdminTeams() {
         <button
           className="btn btn-secondary"
           style={{ padding: '8px 14px', fontSize: '0.72rem', marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, borderColor: 'var(--border-cyan)', color: 'var(--cyan)' }}
-          onClick={downloadPDF}
+          onClick={downloadWord}
           disabled={filteredTeams.length === 0}
-          title="Скачать текущий список команд в PDF"
+          title="Скачать текущий список команд в Word (.docx)"
         >
-          <Download size={13} /> Скачать PDF ({filteredTeams.length})
+          <Download size={13} /> Скачать Word ({filteredTeams.length})
         </button>
       </div>
 
