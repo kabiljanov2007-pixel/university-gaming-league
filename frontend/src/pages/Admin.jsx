@@ -9,7 +9,24 @@ import {
 import { useAuth } from '../contexts/AuthContext'
 import toast from 'react-hot-toast'
 import api from '../hooks/useApi'
-import { Document, Packer, Paragraph, Table, TableRow, TableCell, TextRun, HeadingLevel, AlignmentType, WidthType, BorderStyle, ShadingType } from 'docx'
+import {
+  Document,
+  Packer,
+  Paragraph,
+  Table,
+  TableRow,
+  TableCell,
+  TextRun,
+  HeadingLevel,
+  AlignmentType,
+  WidthType,
+  BorderStyle,
+  ShadingType,
+  PageOrientation,
+  VerticalAlign,
+  TableLayoutType,
+  HeightRule,
+} from 'docx'
 import { saveAs } from 'file-saver'
 
 const navItems = [
@@ -565,31 +582,55 @@ function AdminTeams() {
         })
       )
 
-      const HEADER_BG = '7EC8D8'  // light cyan like in screenshot
-      const BORDER_COLOR = 'AAAAAA'
-      const border = { style: BorderStyle.SINGLE, size: 6, color: BORDER_COLOR }
+      const PAGE_BG = '252525'
+      const ROW_BG = '242424'
+      const ROW_ALT_BG = '2D3234'
+      const CAPTAIN_BG = '5D6265'
+      const HEADER_BG = '78B9C9'
+      const TEXT = 'F4F7FA'
+      const MUTED = 'D6DEE8'
+      const BORDER_COLOR = '7A8288'
+      const transparentBorder = { style: BorderStyle.NONE, size: 0, color: PAGE_BG }
+      const border = { style: BorderStyle.SINGLE, size: 4, color: BORDER_COLOR }
       const allBorders = { top: border, bottom: border, left: border, right: border }
+      const noBorders = {
+        top: transparentBorder,
+        bottom: transparentBorder,
+        left: transparentBorder,
+        right: transparentBorder,
+      }
+
+      const cellText = (text, options = {}) => new Paragraph({
+        alignment: options.center ? AlignmentType.CENTER : AlignmentType.LEFT,
+        spacing: { before: 40, after: 40, line: 220 },
+        children: [new TextRun({
+          text: String(text || ''),
+          bold: options.bold || false,
+          size: options.size || 18,
+          color: options.color || TEXT,
+        })],
+      })
 
       const hCell = (text, w) => new TableCell({
         width: { size: w, type: WidthType.PERCENTAGE },
         borders: allBorders,
-        shading: { type: ShadingType.SOLID, color: HEADER_BG },
-        verticalAlign: 'center',
-        children: [new Paragraph({
-          alignment: AlignmentType.CENTER,
-          spacing: { before: 60, after: 60 },
-          children: [new TextRun({ text, bold: true, size: 20, color: '111111' })],
-        })],
+        shading: { type: ShadingType.SOLID, color: HEADER_BG, fill: HEADER_BG },
+        verticalAlign: VerticalAlign.CENTER,
+        margins: { top: 120, bottom: 120, left: 90, right: 90 },
+        children: [cellText(text, { center: true, bold: true, size: 17, color: '203238' })],
       })
 
       const bCell = (text, w, opts = {}) => new TableCell({
         width: { size: w, type: WidthType.PERCENTAGE },
         borders: allBorders,
-        verticalAlign: 'center',
-        children: [new Paragraph({
-          alignment: opts.center ? AlignmentType.CENTER : AlignmentType.LEFT,
-          spacing: { before: 60, after: 60 },
-          children: [new TextRun({ text: String(text || ''), size: 19, color: '111111', bold: opts.bold || false })],
+        shading: { type: ShadingType.SOLID, color: opts.bg || ROW_BG, fill: opts.bg || ROW_BG },
+        verticalAlign: VerticalAlign.CENTER,
+        margins: { top: 90, bottom: 90, left: 90, right: 90 },
+        children: [cellText(text, {
+          center: opts.center,
+          bold: opts.bold,
+          size: opts.size || 17,
+          color: opts.color || MUTED,
         })],
       })
 
@@ -598,12 +639,12 @@ function AdminTeams() {
         tableHeader: true,
         children: [
           hCell('№', 4),
-          hCell('Название команды', 16),
-          hCell('Капитан команды', 18),
-          hCell('Участники', 32),
-          hCell('ВУЗ / школа', 18),
+          hCell('Название команды', 12),
+          hCell('Капитан команды', 14),
+          hCell('Участники', 27),
+          hCell('ВУЗ / школа', 25),
           hCell('Место', 6),
-          hCell('Подпись', 6),
+          hCell('Подпись', 12),
         ],
       })
 
@@ -612,50 +653,67 @@ function AdminTeams() {
         const captain = members.find(m => m.is_captain)
         const others = members.filter(m => !m.is_captain)
         const participantsText = others.map(m => m.name).join('; ')
+        const rowBg = idx % 2 === 0 ? ROW_BG : ROW_ALT_BG
 
         return new TableRow({
+          height: { value: 560, rule: HeightRule.ATLEAST },
           children: [
-            bCell(idx + 1, 4, { center: true }),
-            bCell(team.name, 16, { bold: true }),
-            bCell(captain ? captain.name : team.captain_name, 18),
-            bCell(participantsText, 32),
-            bCell(team.university, 18),
-            bCell('', 6),
-            bCell('', 6),
+            bCell(idx + 1, 4, { center: true, bg: rowBg, size: 16, color: TEXT }),
+            bCell(team.name, 12, { bg: rowBg, size: 16, color: TEXT }),
+            bCell(captain ? captain.name : team.captain_name, 14, { bold: true, bg: CAPTAIN_BG, size: 15, color: TEXT }),
+            bCell(participantsText, 27, { bg: rowBg, size: 15, color: TEXT }),
+            bCell(team.university, 25, { bg: rowBg, size: 15, color: TEXT }),
+            bCell('', 6, { center: true, bg: rowBg }),
+            bCell('______________', 12, { center: true, bg: rowBg, size: 15, color: TEXT }),
           ],
         })
       })
 
-      const children = [
-        // Title
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          spacing: { before: 0, after: 120 },
-          children: [new TextRun({ text: `Список участников турнира ${discLabel}`, bold: true, size: 32, color: '111111' })],
-        }),
-        // Subtitle note
-        new Paragraph({
-          spacing: { after: 200 },
-          children: [new TextRun({ text: 'Колонки «Место» и «Подпись» оставлены пустыми для заполнения.', size: 18, color: '666666', italics: true })],
-        }),
-        // Main table
-        new Table({
-          width: { size: 100, type: WidthType.PERCENTAGE },
-          rows: [headerRow, ...dataRows],
-        }),
-      ]
+      const participantsTable = new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        layout: TableLayoutType.FIXED,
+        rows: [headerRow, ...dataRows],
+      })
+
+      const darkPanel = new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        borders: noBorders,
+        rows: [new TableRow({
+          children: [new TableCell({
+            borders: allBorders,
+            shading: { type: ShadingType.SOLID, color: PAGE_BG, fill: PAGE_BG },
+            margins: { top: 820, bottom: 820, left: 520, right: 520 },
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 120 },
+                children: [new TextRun({ text: `Список участников турнира ${discLabel}`, bold: true, size: 28, color: TEXT })],
+              }),
+              new Paragraph({
+                spacing: { after: 80 },
+                children: [new TextRun({
+                  text: 'Колонки «Место» и «Подпись» оставлены пустыми для заполнения.',
+                  size: 16,
+                  color: TEXT,
+                })],
+              }),
+              participantsTable,
+            ],
+          })],
+        })],
+      })
 
       const doc = new Document({
         sections: [{
           properties: {
             page: {
-              size: { orientation: 'landscape' },
-              margin: { top: 720, bottom: 720, left: 720, right: 720 },
+              size: { orientation: PageOrientation.LANDSCAPE },
+              margin: { top: 300, bottom: 300, left: 300, right: 300 },
             },
           },
-          children,
+          children: [darkPanel],
         }],
-        styles: { default: { document: { run: { font: 'Calibri', size: 20 } } } },
+        styles: { default: { document: { run: { font: 'Arial', size: 18, color: TEXT } } } },
       })
 
       const blob = await Packer.toBlob(doc)
